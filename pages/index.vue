@@ -1,5 +1,5 @@
 <template>
-  <Tutorial />
+  <button class="button">a</button>
 </template>
 
 <script>
