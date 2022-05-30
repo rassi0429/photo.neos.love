@@ -27,65 +27,65 @@
 import axios from "axios";
 
 export default {
-    name: "UploadPage",
+  name: "UploadPage",
   data() {
-      return {
-        isEnter: false,
-        files: []
+    return {
+      isEnter: false,
+      files: []
 
-      }
-  },
-    methods:{
-      dragEnter() {
-        this.isEnter = true;
-      },
-      dragLeave() {
-        this.isEnter = false;
-      },
-      dragOver() {
-      },
-      dropFile() {
-        this.files.push(...event.dataTransfer.files)
-        this.isEnter = false;
-      },
-      deleteFile(index) {
-        this.files.splice(index, 1)
-      },
-      upload: function () {
-        // FormData を利用して File を POST する
-        let formData = new FormData();
-        formData.append('files', this.uploadFile);
-        let config = {
-          headers: {
-            'content-type': 'multipart/form-data'
-          }
-        };
-        axios
-          .post('yourUploadUrl', formData, config)
-          .then(function (response) {
-          })
-          .catch(function (error) {
-          })
-      },
-      sendFile() {
-        this.files.forEach(file => {
-          let form = new FormData()
-          form.append('file', file)
-          axios.post('url', form).then(response => {
-            console.log(response.data)
-          }).catch(error => {
-            console.log(error)
-          })
-        })
-      },
-      btnclick() {
-        this.$refs.input.click();
-      },
-      onFileChange(e) {
-        let files = e.target.files || e.dataTransfer.files;
-        this.files.push(...files)
-        console.log(files)
-      }
     }
+  },
+  methods: {
+    dragEnter() {
+      this.isEnter = true;
+    },
+    dragLeave() {
+      this.isEnter = false;
+    },
+    dragOver() {
+    },
+    dropFile() {
+      this.files.push(...event.dataTransfer.files)
+      this.isEnter = false;
+    },
+    deleteFile(index) {
+      this.files.splice(index, 1)
+    },
+    // upload: function () {
+    //   // FormData を利用して File を POST する
+    //   let formData = new FormData();
+    //   formData.append('files', this.uploadFile);
+    //   let config = {
+    //     headers: {
+    //       'content-type': 'multipart/form-data'
+    //     }
+    //   };
+    //   axios
+    //     .post('yourUploadUrl', formData, config)
+    //     .then(function (response) {
+    //     })
+    //     .catch(function (error) {
+    //     })
+    // },
+    sendFile() {
+      this.files.forEach(file => {
+        const form = new FormData()
+        form.append('file', file)
+        axios.post('url', form).then(response => {
+          console.log(response.data)
+        }).catch(error => {
+          console.log(error)
+        })
+      })
+    },
+    btnclick() {
+      this.$refs.input.click();
+    },
+    onFileChange(e) {
+      const files = e.target.files || e.dataTransfer.files;
+      this.files.push(...files)
+      console.log(files)
+    }
+  }
 }
 </script>
