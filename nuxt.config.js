@@ -1,5 +1,9 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  server: {
+    port: 3081,
+    host: "0.0.0.0"
+  },
   head: {
     title: 'photo.neos.love',
     meta: [

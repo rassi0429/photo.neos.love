@@ -30,7 +30,7 @@ body {
 </style>
 <script>
 import axios from "axios";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import auth from "@/plugins/auth";
 
 export default {
@@ -43,6 +43,9 @@ export default {
       tag: "",
       uid: ""
     }
+  },
+  computed: {
+    ...mapState(["endpoint"])
   },
   async mounted() {
     this.uid = await this.getUserInfo()
