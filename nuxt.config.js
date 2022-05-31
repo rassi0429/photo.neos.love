@@ -23,7 +23,7 @@ export default {
       { hid: 'og:description', property: 'og:description', content: 'description coomon' },
       { hid: 'og:image', property: 'og:image', content: 'https://cdn.discordapp.com/attachments/765809256129495062/981237029398519818/unknown.png' },
     ],
-    link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}],
+    link: [{rel: 'icon', type: 'image/png', href: '/fav.png'}],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
