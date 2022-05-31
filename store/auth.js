@@ -7,6 +7,7 @@ export const actions = {
     // let token = null
     if (user) {
       console.log('ログイン済み')
+      return user.uid
       // await user.getIdToken(true)
     } else {
       console.log('未ログイン')

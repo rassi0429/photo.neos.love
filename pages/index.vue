@@ -3,22 +3,79 @@
     img#headImg(src="/head.png")
     img#loginBtn(src="/login_btn.png")
     img#uploadBtn(src="/upload_btn.png")
-    button.button#test(@click="getImage") add Images
+    button.button#test(@click="addImage") add Images)
+    button.button#test(@click="twitterLogin") Login
     div#imageroot
-      div.grid-parent(ref="reference")
-        div.grid
-          img(:src="image.url" v-for="(image, i) in shuffle(images)" :key="i")
-        div.grid
-          img(:src="image.url" v-for="(image, i) in shuffle(images)" :key="i")
-        div.grid
-          img(:src="image.url" v-for="(image, i) in shuffle(images)" :key="i")
-        div.grid
-          img(:src="image.url" v-for="(image, i) in shuffle(images)" :key="i")
+      div.grid-parent
+        div.grid( v-for="(a, k) in images" :key="k")
+          img(:src="img.url" v-for="(img, i) in a" :key="i")
 
 </template>
+<script>
+import {mapActions, mapState} from "vuex";
+import axios from "axios";
+
+export default {
+  name: 'IndexPage',
+  data() {
+    return {
+      hoge: "hage",
+      images: [],
+      rows: 4
+    }
+  },
+  computed: {
+    ...mapState(["endpoint"])
+  },
+  methods: {
+    ...mapActions('auth', ['getUserInfo', "twitterLogin"]),
+    async getImage() {
+      const {data} = await axios.get(`${this.endpoint}/v1/photos`)
+      for (let i = 0; i < data.length; i++) {
+        if (this.images[i % this.rows]) {
+          this.images[i % this.rows].push(data[i])
+        } else {
+          this.images[i % this.rows] = [data[i]]
+        }
+      }
+      this.images.splice()
+    },
+    async addImage() {
+      const {data} = await axios.get(`${this.endpoint}/v1/photos`)
+
+
+      for (let i = 0; i < data.length; i++) {
+        if (this.images[i % this.rows]) {
+          this.images[i % this.rows].push(data[i])
+        } else {
+          this.images[i % this.rows] = [data[i]]
+        }
+      }
+      this.images.splice()
+    },
+    shuffle(array) {
+      let currentIndex = array.length
+      let randomIndex = 0;
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+      return array;
+    },
+  },
+  mounted() {
+    this.getUserInfo()
+    this.getImage()
+  }
+}
+</script>
+
 <style>
 #root {
   background-color: black;
+  min-height: 100vh;
 }
 
 #headImg {
@@ -43,7 +100,7 @@
 #imageroot {
   width: 80vw;
   margin: auto;
-  padding-top: 120px;
+  padding-top: 5em;
 }
 
 #test {
@@ -65,44 +122,4 @@
   margin-right: 4px;
 }
 
-img {
-}
-
 </style>
-<script>
-import {mapActions} from "vuex";
-import axios from "axios";
-
-export default {
-  name: 'IndexPage',
-  data() {
-    return {
-      hoge: "hage",
-      images: []
-    }
-  },
-  methods: {
-    ...mapActions('auth', ['getUserInfo', "twitterLogin"]),
-    async getImage() {
-      const {data} = await axios.get("http://localhost:3001/photos")
-      this.images.push(...data)
-      console.log(data)
-    },
-    shuffle(array) {
-      let currentIndex = array.length
-      let randomIndex = 0;
-      while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        [array[currentIndex], array[randomIndex]] = [
-          array[randomIndex], array[currentIndex]];
-      }
-      return array;
-    },
-  },
-  mounted() {
-    this.getUserInfo()
-    this.getImage()
-  }
-}
-</script>
