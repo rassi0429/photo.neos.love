@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "_id.vue",
+  name: "MomentId",
   head () {
     return {
       title: "hogehage",
@@ -15,6 +15,10 @@ export default {
         { hid: 'og:description', property: 'og:description', content: "OGP siteru wayo"},
         { hid: 'og:url', property: 'og:url', content: "http://localhost" },
         { hid: 'og:image', property: 'og:image', content: "https://media.discordapp.net/attachments/765809256129495062/980938539732705330/PXL_20220530_205913740.jpg?width=363&height=484" },
+        { hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image' },
+        { hid: 'twitter:title', property: 'twitter:title', content: 'OGP' },
+        { hid: 'twitter:description', property: 'twitter:description', content: 'description' },
+        { hid: 'twitter:image', property: 'twitter:image', content: "https://media.discordapp.net/attachments/765809256129495062/980938539732705330/PXL_20220530_205913740.jpg?width=363&height=484" },
       ],
     }
   }

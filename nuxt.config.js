@@ -22,6 +22,11 @@ export default {
       { hid: 'og:title', property: 'og:title', content: 'NeosFrames' },
       { hid: 'og:description', property: 'og:description', content: 'description coomon' },
       { hid: 'og:image', property: 'og:image', content: 'https://cdn.discordapp.com/attachments/765809256129495062/981237029398519818/unknown.png' },
+
+      { hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image' },
+      { hid: 'twitter:title', property: 'twitter:title', content: 'Title' },
+      { hid: 'twitter:description', property: 'twitter:description', content: 'description' },
+      { hid: 'twitter:image', property: 'twitter:image', content: 'https://cdn.discordapp.com/attachments/765809256129495062/981237029398519818/unknown.png' },
     ],
     link: [{rel: 'icon', type: 'image/png', href: '/fav.png'}],
   },
