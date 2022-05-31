@@ -17,6 +17,11 @@ import axios from "axios";
 
 export default {
   name: 'IndexPage',
+  head() {
+    return {
+      titleTemplate: null
+    }
+  },
   data() {
     return {
       hoge: "hage",
