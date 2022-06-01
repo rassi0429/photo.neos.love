@@ -1,22 +1,28 @@
 <template lang="pug">
-  div#root
-    img#headImg(src="/head.png")
-    img#loginBtn(src="/login_btn.png")
-    img#uploadBtn(src="/upload_btn.png")
-    button.button#test(@click="addImage") add Images)
-    button.button#test(@click="twitterLogin") Login
-    div#imageroot
-      div.grid-parent
-        div.grid( v-for="(a, k) in images" :key="k")
-          img(:src="img.url" v-for="(img, i) in a" :key="i")
+  div
+    photo-view-modal
+    div#root(:class="{'blur': isModalOpen}")
+      img#TopGradation(src="/top_gradation.png")
+      img#headImg(src="/head.png")
+      nuxt-link#uploadBtn(v-show="uid" to="/upload" tag="img" src="/upload_btn.png")
+      nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid+'/photos'" tag="img" :src="photoUrl")
+      img#uploadBtn(v-show="!uid" @click="twitterLogin" src="/login_btn.png")
+      div#test
+        button.button(@click="addImage") add Images)
+        button.button(@click="LogOut" v-show="uid") LogOut
+      div#imageroot
+        grid-image(:images="images" replace="thumbnail")
 
 </template>
 <script>
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
 import axios from "axios";
+import auth from "@/plugins/auth";
+import PhotoViewModal from "@/components/modal";
 
 export default {
   name: 'IndexPage',
+  components: {PhotoViewModal},
   head() {
     return {
       titleTemplate: null
@@ -26,37 +32,30 @@ export default {
     return {
       hoge: "hage",
       images: [],
-      rows: 4
+      rows: 4,
+      isLoggedin: false,
+      uid: "",
+      photoUrl: "",
+      tmpScrollState: false,
+      page: 0
     }
   },
   computed: {
-    ...mapState(["endpoint"])
+    ...mapState(["endpoint"]),
   },
   methods: {
-    ...mapActions('auth', ['getUserInfo', "twitterLogin"]),
+    ...mapActions('auth', ['getUserInfo', "twitterLogin", "LogOut"]),
     async getImage() {
-      const {data} = await axios.get(`${this.endpoint}/v1/photos`)
-      for (let i = 0; i < data.length; i++) {
-        if (this.images[i % this.rows]) {
-          this.images[i % this.rows].push(data[i])
-        } else {
-          this.images[i % this.rows] = [data[i]]
-        }
-      }
-      this.images.splice()
+      const { data } = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}`)
+      this.images = data
     },
     async addImage() {
-      const {data} = await axios.get(`${this.endpoint}/v1/photos`)
-
-
-      for (let i = 0; i < data.length; i++) {
-        if (this.images[i % this.rows]) {
-          this.images[i % this.rows].push(data[i])
-        } else {
-          this.images[i % this.rows] = [data[i]]
-        }
+      this.page += 1
+      const { data } = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}`)
+      if(data.length === 0) {
+        this.page -= 1
       }
-      this.images.splice()
+      this.images.push(...data)
     },
     shuffle(array) {
       let currentIndex = array.length
@@ -69,37 +68,75 @@ export default {
       }
       return array;
     },
+    async handleScroll(e) {
+      if(((document.body.clientHeight - window.innerHeight) - window.scrollY) < 100 && !this.tmpScrollState){
+        console.log(this.tmpScrollState)
+        this.tmpScrollState = true
+        await this.addImage()
+      }
+      if (((document.body.clientHeight - window.innerHeight) - window.scrollY) > 100){
+        this.tmpScrollState = false
+      }
+    }
   },
-  mounted() {
-    this.getUserInfo()
-    this.getImage()
+  async mounted() {
+    this.uid = (await this.getUserInfo())
+    const user = await auth()
+    this.photoUrl = user.photoURL
+    await this.getImage()
+    window.addEventListener('scroll', this.handleScroll);
+
+
   }
 }
 </script>
 
 <style>
 #root {
-  background-color: black;
+  background-color: #050505;
   min-height: 100vh;
 }
 
+
 #headImg {
   position: fixed;
-  width: 7%;
+  width: 5%;
+  opacity: 50%;
+  margin-top: 1em;
+  z-index: 20;
+  -webkit-user-drag: none;
+}
+
+#TopGradation {
+  position: fixed;
+  height: 5em;
+  width: 100vw;
+  z-index: 10;
 }
 
 #loginBtn {
   position: fixed;
   right: 10px;
   bottom: 30px;
-  max-width: 70px;
+  max-width: 50px;
+  opacity: 50%;
+  border-radius: 100%;
+}
+
+#loginBtn:hover {
+  opacity: 90%
 }
 
 #uploadBtn {
   position: fixed;
   right: 10px;
-  bottom: 120px;
-  max-width: 70px;
+  bottom: 90px;
+  max-width: 50px;
+  opacity: 20%
+}
+
+#uploadBtn:hover {
+  opacity: 50%
 }
 
 #imageroot {
@@ -111,20 +148,6 @@ export default {
 #test {
   position: fixed;
   right: 0;
+  top: 100px;
 }
-
-.grid-parent {
-  display: flex;
-  flex-direction: row;
-}
-
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-content: flex-start;
-  gap: 4px 0px;
-  margin-right: 4px;
-}
-
 </style>
