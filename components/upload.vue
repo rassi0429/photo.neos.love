@@ -1,11 +1,11 @@
 <template lang="pug">
-  div.upload-modal-wrap(v-if="isUploadModal" @mouseup="closeModal")
+  div.upload-modal-wrap(v-if="isUploadModal")
     div.columns.upload-modal(@mouseup.stop)
       input(type="file" ref="file_upload" style="display: none" @change="onFileChange" multiple)
       img#CloseBtn(@click="closeModal" src="/close.png")
-      div.column.is-5(v-if="!isUploading")
-        div#UploadBox
-          img#UploadIcon(@dragenter="dragEnter" @dragleave="dragLeave" @dragover.prevent @drop.prevent="dropFile" @click="$refs.file_upload.click()" src="/upload.png")
+      div.column.is-5#EditField(v-if="!isUploading")
+        div#UploadBox(@dragenter="dragEnter" @dragleave="dragLeave" @dragover.prevent @drop.prevent="dropFile" @click="$refs.file_upload.click()")
+          img#UploadIcon( src="/upload.png")
           p#UploadInfo Click or Drop a Image(s)
         div.field.is-horizontal
           .is-normal
@@ -23,30 +23,34 @@
                 button.button.is-white.is-outlined#TagBtn(@click="deleteTag(ii)")
                   | {{tag}}
         div.control
-          // input.input#textbox(placeholder="Tag" v-model="tag")
           input#textbox(v-model="tmpTag")
           img#AddTagBtn(@click="addTag(); tmpTag = ''" src="/plus.png")
-        div.field
-          div.control
-            img#SubmitBtn(@click="submit" src="/upload_btn.png")
+
         img#SubmitBtn(@click="submit" src="/upload_btn.png")
       div.column.is-7(v-if="!isUploading")
-        p.subtitle {{ uploadCount }} images
+        p.subtitle {{ this.files.length }} images
         div.upload-img
-          div.columns.is-multiline(v-for="(file,index) in files" :key="index" )
-            div.column.is-3()
+          div.is-flex(v-for="(file,index) in files" :key="index" )
+            div.is-flex-1
               img(:src="getFileUrl(file)")
-            div.column.is-9
-              input(type="text" @change="(text) => changeComment({text,index})")
-              button.button(@click="deleteFile(index)") 削除
+            div.is-flex-3.is-flex
+              textarea.is-flex-grow-1#commentField(type="text" @change="(text) => changeComment({text,index})" placeholder="comment")
+              img#deleteBtn(@click="deleteFile(index)" src="/delete.png")
       div.column.is-5(v-if="isUploading")
-        | uploading...  {{ uploadCount }} / {{ files.length }}
+        p.title uploading...  {{ uploadCount }} / {{ files.length }}
 </template>
 <style>
 .upload-img {
-  max-height: 90%;
+  max-height: 80%;
   overflow-y: scroll;
-  overflow-x: hidden;
+}
+
+.is-flex-1 {
+  flex : 1
+}
+
+.is-flex-3 {
+  flex : 3
 }
 
 .upload-modal-wrap {
@@ -76,6 +80,10 @@
 
 p{
   color: #FFFFFF;
+}
+
+#EditField {
+  position: relative;
 }
 
 #UploadBox {
@@ -129,12 +137,10 @@ p{
 
 #SubmitBtn {
   position: absolute;
-  bottom: 0%;
-  right: 0%;
-  margin-bottom: 0.8em;
-  margin-right: 0.8em;
-  max-width: 30px;
-  opacity: 20%
+  opacity: 50%;
+  width: 50px;
+  right: 0px;
+  bottom: 0px;
 }
 
 #SubmitBtn:hover {
@@ -181,6 +187,30 @@ p{
   top: 0.5em;
 }
 #TagBtn:hover {
+  opacity: 50%;
+}
+
+#commentField{
+  display: block;
+  opacity: 50%;
+  width: auto;
+  border-right:none;
+  border-left:none;
+  border-top:none;
+  border-bottom:1px solid #ffffff;
+  background-color: transparent;
+  bottom: 0px;
+  color: #FFFFFF;
+  padding-left: 10px;
+  padding-right: 10px;
+  }
+
+#deleteBtn{
+  opacity: 20%;
+  height: 30px;
+  padding-left: 5px;
+}
+#deleteBtn:hover {
   opacity: 50%;
 }
 

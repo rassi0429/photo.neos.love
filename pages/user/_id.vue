@@ -1,27 +1,28 @@
 <template lang="pug">
-  div
-    textarea#copytext(:value="'aaaa'")
-    nuxt-link#headImg(to="/" tag="img" src="/head.png")
-    img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
-    img#logoutBtn(v-show="uid" @click="LogOut" src="/logout.png")
-    p#counter  {{userInfo.countInfo.photo}} pictures
-    div#headerBackground
-    img#GridGradation(src="/top_gradation.png")
-    div#content
-      div.user-header.is-flex
-        img#avatar(:src="userInfo.user.twitterImage.replace('_normal', '')")
-        a.has-text-white#UserName(:href="'https://twitter.com/intent/user?user_id='+ userInfo.user.twitterId") {{ userInfo.user.name }}
-        div.ml-auto(:class="{'oa': !momentShow,'on': momentShow}")
-          p#ViewToggleBtn(:class="{'notactive': momentShow}" @click="momentShow = !momentShow") Photos
-          p#ViewToggleBtn(:class="{'notactive': !momentShow}" @click="momentShow =  !momentShow") Moments
-      div#imageGrid
-        photo-view-modal
-        upload-modal
-        grid-image(v-if="!momentShow" :images="photos")
-        div#MomentBlock(v-if="momentShow" v-for="(moment,i) in moments" :key="i")
-          a#MomentTitle(:href="'/moment/'+ moment.id") {{ moment.title || "NoTitle"  }}
-          img#shareBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
-          grid-image#MomentPhotoGrid(:images="moment.photos")
+  div()
+    photo-view-modal
+    upload-modal
+    div(:class="{'blur': isModalOpen || isUploadModal}")
+      textarea#copytext(:value="'aaaa'")
+      nuxt-link#headImg(to="/" tag="img" src="/head.png")
+      img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
+      img#logoutBtn(v-show="uid" @click="LogOut" src="/logout.png")
+      p#counter  {{userInfo.countInfo.photo}} pictures
+      div#headerBackground
+      img#GridGradation(src="/top_gradation.png")
+      div#content
+        div.user-header.is-flex
+          img#avatar(:src="userInfo.user.twitterImage.replace('_normal', '')")
+          a.has-text-white#UserName(:href="'https://twitter.com/intent/user?user_id='+ userInfo.user.twitterId") {{ userInfo.user.name }}
+          div.ml-auto(:class="{'oa': !momentShow,'on': momentShow}")
+            p#ViewToggleBtn(:class="{'notactive': momentShow}" @click="momentShow = !momentShow") Photos
+            p#ViewToggleBtn(:class="{'notactive': !momentShow}" @click="momentShow =  !momentShow") Moments
+        div#imageGrid
+          grid-image(v-if="!momentShow" :images="photos")
+          div#MomentBlock(v-if="momentShow" v-for="(moment,i) in moments" :key="i")
+            a#MomentTitle(:href="'/moment/'+ moment.id") {{ moment.title || "NoTitle"  }}
+            img#shareBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
+            grid-image#MomentPhotoGrid(:images="moment.photos")
 </template>
 <style scoped>
 #copytext {
@@ -33,6 +34,13 @@ body {
   background-color: #050505;
   min-height: 100vh;
   padding-bottom: 100px;
+}
+
+.blur {
+  -webkit-filter: blur(8px);
+  -moz-filter: blur(8px);
+  -ms-filter: blur(8px);
+  filter: blur(8px);
 }
 
 .oa {
@@ -205,7 +213,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(["endpoint"])
+    ...mapState(["endpoint"]),
+    ...mapState("modal",["isModalOpen"]),
+    ...mapState("upload",["isUploadModal"]),
   },
   async mounted() {
     this.uid = await this.getUserInfo()
