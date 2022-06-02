@@ -4,7 +4,7 @@
 </template>
 <style>
 body {
-  background-color: black;
+  background-color: #050505;
   min-height: 100vh;
 }
 </style>
@@ -14,9 +14,9 @@ import { mapActions, mapState } from "vuex";
 export default {
   name: "UserIndex",
   data() {
-      return {
-        uid: ""
-      }
+    return {
+      uid: ""
+    }
   },
   computed: {
     ...mapState(["endpoint"])
@@ -24,7 +24,7 @@ export default {
   async mounted() {
     this.uid = await this.getUserInfo()
     console.log(this.uid)
-    this.$router.push("/user/"+this.uid+"/photos")
+    this.$router.push("/user/" + this.uid)
   },
   methods: {
     ...mapActions('auth', ['getUserInfo', "twitterLogin"]),

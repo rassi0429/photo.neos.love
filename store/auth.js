@@ -1,17 +1,29 @@
+import axios from "axios";
 import firebase from '../plugins/firebase'
 import auth from '~/plugins/auth'
+
+export const state = () => ({
+  uid: ""
+})
+
+export const mutations = {
+  setUid(state,uid) {
+    state.uid = uid
+  }
+}
 
 export const actions = {
   async getUserInfo({ commit, rootState }) {
     const user = await auth()
-    console.log(user)
-    // let token = null
     if (user) {
       console.log('ログイン済み')
+      const token = await user.getIdToken(true)
+      await axios.post(`${rootState.endpoint}/v1/user/`,{},{headers: {token}})
+      commit('setUid', user.uid)
       return user.uid
-      // await user.getIdToken(true)
     } else {
       console.log('未ログイン')
+      commit('setUid', "")
       return null
     }
   },
@@ -21,7 +33,8 @@ export const actions = {
   },
   LogOut({ commit, rootState }) {
     firebase.auth().signOut().then(() => {
-      location.reload()
+      commit('setUid', "")
+      location.href = `/`
     })
   }
 }

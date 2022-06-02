@@ -11,10 +11,10 @@ export default {
     },
     titleTemplate: '%s - NeosFrames',
     meta: [
-      {charset: 'utf-8'},
-      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {hid: 'description', name: 'description', content: ''},
-      {name: 'format-detection', content: 'telephone=no'},
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'description', name: 'description', content: '' },
+      { name: 'format-detection', content: 'telephone=no' },
       { hid: 'description', name: 'description', content: 'this is description' },
       { hid: 'og:site_name', property: 'og:site_name', content: 'NeosFrames' },
       { hid: 'og:type', property: 'og:type', content: 'website' },
@@ -28,7 +28,7 @@ export default {
       { hid: 'twitter:description', property: 'twitter:description', content: 'description' },
       { hid: 'twitter:image', property: 'twitter:image', content: 'https://cdn.discordapp.com/attachments/765809256129495062/981237029398519818/unknown.png' },
     ],
-    link: [{rel: 'icon', type: 'image/png', href: '/fav.png'}],
+    link: [{ rel: 'icon', type: 'image/png', href: '/fav.png' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -36,7 +36,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    {src: '~/plugins/vue-masonry', ssr: false}],
+    { src: '~/plugins/vue-masonry', ssr: false }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -53,7 +53,13 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
-  ],
+    'nuxt-webfontloader'
+  ], 
+  webfontloader: {
+    google: {
+      families: ['Lato:400,700', 'Noto+Sans+JP:400,700']
+    }
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

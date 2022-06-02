@@ -1,28 +1,30 @@
 <template lang="pug">
   div
     photo-view-modal
-    div#root(:class="{'blur': isModalOpen}")
+    upload-modal
+    div#root(:class="{'blur': isModalOpen || isUploadModal}")
       img#TopGradation(src="/top_gradation.png")
       img#headImg(src="/head.png")
-      nuxt-link#uploadBtn(v-show="uid" to="/upload" tag="img" src="/upload_btn.png")
-      nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid+'/photos'" tag="img" :src="photoUrl")
+      img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
+      nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
       img#uploadBtn(v-show="!uid" @click="twitterLogin" src="/login_btn.png")
-      div#test
-        button.button(@click="addImage") add Images)
-        button.button(@click="LogOut" v-show="uid") LogOut
+      //div#test
+      //  button.button(@click="addImage") add Images)
+      //  button.button(@click="LogOut" v-show="uid") LogOut
       div#imageroot
         grid-image(:images="images" replace="thumbnail")
 
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState,mapMutations } from "vuex";
 import axios from "axios";
 import auth from "@/plugins/auth";
 import PhotoViewModal from "@/components/modal";
+import UploadModal from "@/components/upload";
 
 export default {
   name: 'IndexPage',
-  components: {PhotoViewModal},
+  components: {PhotoViewModal,UploadModal},
   head() {
     return {
       titleTemplate: null
@@ -42,9 +44,12 @@ export default {
   },
   computed: {
     ...mapState(["endpoint"]),
+    ...mapState("modal", ["isModalOpen"]),
+    ...mapState("upload", ["isUploadModal"])
   },
   methods: {
     ...mapActions('auth', ['getUserInfo', "twitterLogin", "LogOut"]),
+    ...mapMutations('upload', ['openModal', "closeModal"]),
     async getImage() {
       const { data } = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}`)
       this.images = data
@@ -85,8 +90,6 @@ export default {
     this.photoUrl = user.photoURL
     await this.getImage()
     window.addEventListener('scroll', this.handleScroll);
-
-
   }
 }
 </script>
@@ -150,4 +153,12 @@ export default {
   right: 0;
   top: 100px;
 }
+
+.blur {
+  -webkit-filter: blur(8px);
+  -moz-filter: blur(8px);
+  -ms-filter: blur(8px);
+  filter: blur(8px);
+}
+
 </style>
