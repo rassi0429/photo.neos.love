@@ -2,7 +2,7 @@
   div.md(v-show="isModalOpen" @click="closeModal()")
     div.image-modal(@click.stop)
       img#editBtn(v-if="!isEditing && (uid === modalData.author)" @click="updateEditState(true)" src="/pen.png")
-      img#deleteBtn(v-if="!isEditing && (uid === modalData.author)" @click="deletePhoto" src="delete.png")
+      img#deleteBtn(v-if="!isEditing && (uid === modalData.author)" @click="deletePhoto" src="/delete.png")
       img#CloseBtn(@click="closeModal()" src="/close.png")
       div.columns.h100.m0
         div.column.is-9.h100.p0.center
