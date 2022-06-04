@@ -115,7 +115,7 @@ p{
 }
 
 #UploadBox {
-  opacity: 20%;
+  opacity: 0.2;;
   min-height: 200px;
   max-height: 300px;
   -webkit-user-drag: none;
@@ -125,7 +125,7 @@ p{
   margin-bottom: 1em;
 }
 #UploadBox:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 #UploadIcon {
   width: 100px;
@@ -144,7 +144,7 @@ p{
 }
 
 #textbox {
-  opacity: 50%;
+  opacity: 0.5;;
   max-width: 500px;
   border-right:none;
   border-left:none;
@@ -156,7 +156,7 @@ p{
 }
 
 #textbox:hover {
-  opacity: 80%;
+  opacity: 0.8;;
 }
 
 #textbox::placeholder {
@@ -165,7 +165,7 @@ p{
 
 #SubmitBtn {
   position: absolute;
-  opacity: 50%;
+  opacity: 0.5;;
   width: 50px;
   right: 0px;
   bottom: 0px;
@@ -173,7 +173,7 @@ p{
 }
 
 #SubmitBtn:hover {
-  opacity: 80%;
+  opacity: 0.8;;
 }
 
 #UploadBtnLabel {
@@ -191,7 +191,7 @@ p{
   margin-bottom: 0.8em;
   margin-right: 0.8em;
   max-width: 30px;
-  opacity: 20%
+  opacity: 0.2;
 }
 
 #TagBtnField {
@@ -207,34 +207,34 @@ p{
 }
 
 #TagBtn {
-  opacity: 20%;
+  opacity: 0.2;;
   margin-right: 3px;
   margin-bottom: 3px;
   height: 1.2em;
   border-radius: 5px;
 }
 #TagBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #AddTagBtn {
-  opacity: 20%;
+  opacity: 0.2;;
   width: 1em;
   margin-left: 0.5em;
   top: 0.5em;
 }
 #TagBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #ImageCounter {
-  opacity: 50%;
+  opacity: 0.5;;
   margin-bottom: 0.5em;
 }
 
 #commentField{
   display: block;
-  opacity: 50%;
+  opacity: 0.5;;
   width: auto;
   border-right:none;
   border-left:none;
@@ -259,16 +259,16 @@ p{
 }
 
 #deleteBtn{
-  opacity: 20%;
+  opacity: 0.2;;
   height: 30px;
   padding-left: 5px;
 }
 #deleteBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #CloseBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #uploadingAnims {
@@ -277,7 +277,7 @@ p{
 }
 
 #loadIcon {
-  opacity: 50%;
+  opacity: 0.5;;
   width: 80px;
   max-height: 30%;
   padding: 0px;
@@ -285,7 +285,7 @@ p{
 
 #uploadingInfo {
   text-align: center;
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 </style>

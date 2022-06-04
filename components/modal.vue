@@ -152,12 +152,12 @@ p {
   margin-bottom: 0.8em;
   margin-right: 0.8em;
   max-width: 30px;
-  opacity: 20%;
+  opacity: 0.2;;
   z-index: 10;
 }
 
 #CloseBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #comment {
@@ -166,7 +166,7 @@ p {
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #comment::-webkit-scrollbar {
@@ -180,12 +180,12 @@ p {
   margin-top: 4em;
   margin-right: 1em;
   max-width: 30px;
-  opacity: 20%;
+  opacity: 0.2;;
   z-index: 10;
 }
 
 #deleteBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #editBtn {
@@ -195,12 +195,12 @@ p {
   margin-top: 0.8em;
   margin-right: 0.8em;
   max-width: 30px;
-  opacity: 20%;
+  opacity: 0.2;;
   z-index: 10;
 }
 
 #editBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #tags {
@@ -208,7 +208,7 @@ p {
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  opacity: 50%;
+  opacity: 0.5;;
 }
 #tags > a {
   color: lightskyblue;
@@ -223,7 +223,7 @@ p {
   position: absolute;
   bottom: 0%;
   margin-bottom: 3em;
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #UserLink {
@@ -240,7 +240,7 @@ p {
 
 #editUI {
   position: absolute;
-  opacity: 50%;
+  opacity: 0.5;;
   width: 100px;
   right: 1em;
   bottom: 5em;
@@ -249,21 +249,21 @@ p {
 }
 
 #saveBtn {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 #saveBtn:hover {
-  opacity: 80%;
+  opacity: 0.8;;
 }
 #saveBtnIcon {
   width: 50px;
 }
 
 #cancelBtn {
-  opacity: 50%;
+  opacity: 0.5;;
   width: 50px;
 }
 #cancelBtn:hover {
-  opacity: 80%;
+  opacity: 0.8;;
 }
 #cancelBtnIcon {
   width: 50px;
@@ -277,17 +277,17 @@ p {
   position: absolute;
   bottom: 0%;
   margin-bottom: 1.5em;
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #AddTagBtn {
-  opacity: 20%;
+  opacity: 0.2;;
   width: 1em;
   margin-left: 0.5em;
   margin-top: 0.5em;
 }
 #AddTagBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #commentField {
@@ -309,13 +309,13 @@ p {
 }
 
 #TagBtn {
-  opacity: 20%;
+  opacity: 0.2;;
   margin-right: 3px;
   margin-bottom: 3px;
   height: 1.2em;
   border-radius: 5px;
 }
 #TagBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 </style>
