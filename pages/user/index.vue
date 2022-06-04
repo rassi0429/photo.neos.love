@@ -1,8 +1,8 @@
 <template lang="pug">
-  div.container 
+  div.container
     | HI
 </template>
-<style>
+<style scoped>
 body {
   background-color: #050505;
   min-height: 100vh;

@@ -42,7 +42,7 @@
           img#loadIcon(src="~/assets/load.png")
           p#uploadingInfo uploading...  {{ uploadCount }} / {{ files.length }}
 </template>
-<style>
+<style scoped>
 .upload-img {
   max-height: 85%;
   overflow-y: scroll;

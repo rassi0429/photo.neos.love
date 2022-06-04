@@ -93,7 +93,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #root {
   background-color: #050505;
   min-height: 100vh;
