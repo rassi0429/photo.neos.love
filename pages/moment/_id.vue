@@ -8,7 +8,7 @@
         p#date {{ formatDate(new Date(momentData.createDate)) }}
         div.is-flex#header
           p#MomentTitle {{ momentData.title || ""}}
-          img#shareBtn(src="/link.png", alt="link" :ref="'m' + $route.params.id" @click="copyMomentUrl($route.params.id)")
+          img#shareBtn(src="/link.png", alt="link" ref="tag" @click="copyMomentUrl($route.params.id)")
         grid-image(:images="momentData.photos")
     photo-view-modal
     upload-modal
@@ -78,11 +78,11 @@ export default {
       const clipboardText = `https://photo.neos.love/moment/${id}`;
       try {
         navigator.clipboard.writeText(clipboardText);
-        this.$refs['m' + id][0].src = '/check.png'
+        this.$refs.tag.src = '/check.png'
         setTimeout(() => {
-          this.$refs['m' + id][0].src = '/link.png'
+          this.$refs.tag.src = '/link.png'
         }, 2000)
-      } catch {
+      } catch(e) {
         alert(`https ni site ne`)
       }
     }
