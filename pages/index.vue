@@ -3,13 +3,13 @@
     photo-view-modal
     upload-modal
     div#root(:class="{'blur': isModalOpen || isUploadModal}")
-      img#TopGradation(src="~/assets/top_gradation.png")
-      img.headImg(src="~/assets/head.png")
-      img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="~/assets/upload_btn.png")
+      img#TopGradation(src="/top_gradation.png")
+      img.headImg(src="/head.png")
+      img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
       nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
-      img#uploadBtn(v-show="!uid" @click="twitterLogin" src="~/assets/login_btn.png")
+      img#uploadBtn(v-show="!uid" @click="twitterLogin" src="/login_btn.png")
       a#CodeBtn(href="https://github.com/rassi0429/photo.neos.love")
-        img(src="~/assets/code.png")
+        img(src="/code.png")
       div#imageroot
         grid-image(:images="images" replace="thumbnail")
 

@@ -8,7 +8,7 @@
         p#date {{ formatDate(new Date(momentData.createDate)) }}
         div.is-flex#header
           p#MomentTitle {{ momentData.title || ""}}
-          img#shareBtn(src="~/assets/link.png", alt="link" :ref="'m' + $route.params.id" @click="copyMomentUrl($route.params.id)")
+          img#shareBtn(src="/link.png", alt="link" :ref="'m' + $route.params.id" @click="copyMomentUrl($route.params.id)")
         grid-image(:images="momentData.photos")
     photo-view-modal
     upload-modal

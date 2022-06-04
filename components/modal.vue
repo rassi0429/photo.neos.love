@@ -3,7 +3,7 @@
     div.image-modal(@click.stop)
       img#editBtn(v-if="!isEditing && (uid === modalData.author)" @click="updateEditState(true)" src="/pen.png")
       img#deleteBtn(v-if="!isEditing && (uid === modalData.author)" @click="deletePhoto" src="delete.png")
-      img#CloseBtn(@click="closeModal()" src="~/assets/close.png")
+      img#CloseBtn(@click="closeModal()" src="/close.png")
       div.columns.h100.m0
         div.column.is-9.h100.p0.center
           img#ImageInModal(:src="modalData.url")
@@ -14,15 +14,15 @@
               div#TagBtnField
                 button.button.is-white.is-outlined#TagBtn(v-for="(tag, ii) in editingTag" :key="ii" @click="deleteTag(ii)") {{ tag }}
               input#textbox(v-model="tmpTag")
-              img#AddTagBtn(:disabled="!tmpTag" @click="addTag" src="~/assets/plus.png")
+              img#AddTagBtn(:disabled="!tmpTag" @click="addTag" src="/plus.png")
           div#tags(v-for="(t,i) in modalData.tags" :key="i")
             a(:href="'/tag/' + t.name ") {{ "#" + t.name}}
           div.is-flex#editUI(v-if="isEditing")
             div#saveBtn
-              img#saveBtnIcon(@click="updatePhoto();updateEditState(false)" src="~/assets/save.png")
+              img#saveBtnIcon(@click="updatePhoto();updateEditState(false)" src="/save.png")
               p#BtnLabel Save
             div#cancelBtn
-              img#cancelBtnIcon(@click="updateEditState(false)" src="~/assets/cancel.png")
+              img#cancelBtnIcon(@click="updateEditState(false)" src="/cancel.png")
               p#BtnLabel Cancel
           div#UploadUser.is-flex
             | Uploaded by&nbsp;

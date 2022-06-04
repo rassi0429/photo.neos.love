@@ -2,10 +2,10 @@
   div#momentRoot
     div(:class="{'blur': isModalOpen || isUploadModal}")
       nuxt-link#headImg(to="/" tag="img" src="/head.png")
-      img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="~/assets/upload_btn.png")
+      img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
       nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
       div#headerBackground
-      img#GridGradation(src="~/assets/top_gradation.png")
+      img#GridGradation(src="/top_gradation.png")
       div#content
         div.user-header.is-flex
           p#MomentTitle Tag : {{ $route.params.id }}
