@@ -1,7 +1,7 @@
 <template lang="pug">
   div#momentRoot
     div(:class="{'blur': isModalOpen || isUploadModal}")
-      nuxt-link#headImg(to="/" tag="img" src="/head.png")
+      nuxt-link.headImg(to="/" tag="img" src="/head.png")
       img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
       nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
       div#headerBackground
@@ -100,14 +100,6 @@ export default {
   line-height: min(50px, max(5vw,20px));
 }
 
-.headImg {
-  position: fixed;
-  width: 5%;
-  opacity: 0.5;;
-  margin-top: 1em;
-  z-index: 20;
-  -webkit-user-drag: none;
-}
 
 #content {
   width: 80vw;

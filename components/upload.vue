@@ -1,7 +1,7 @@
 <template lang="pug">
   div.upload-modal-wrap(v-if="isUploadModal")
     div.columns.upload-modal(@mouseup.stop)
-      input(type="file" ref="file_upload" style="display: none" @change="onFileChange" multiple)
+      input(type="file" accept="image/*" ref="file_upload" style="display: none" @change="onFileChange" multiple)
       img#CloseBtn(@click="closeModal" src="/close.png")
       div.column.is-5#EditField(v-if="!isUploading")
         div#UploadBox(@dragenter="dragEnter" @dragleave="dragLeave" @dragover.prevent @drop.prevent="dropFile" @click="$refs.file_upload.click()")
@@ -47,24 +47,27 @@
   max-height: 85%;
   overflow-y: scroll;
 }
+
 .upload-img::-webkit-scrollbar {
   width: 10px;
 }
+
 .upload-img::-webkit-scrollbar-track {
   background: #505050;
   border-radius: 5px;
 }
+
 .upload-img::-webkit-scrollbar-thumb {
   background: #aaaaaa;
   border-radius: 5px;
 }
 
 .is-flex-1 {
-  flex : 1
+  flex: 1
 }
 
 .is-flex-3 {
-  flex : 3
+  flex: 3
 }
 
 .upload-modal-wrap {
@@ -91,7 +94,7 @@
   margin: auto;
 }
 
-p{
+p {
   color: #FFFFFF;
 }
 
@@ -123,9 +126,11 @@ p{
   background-color: #202020;
   margin-bottom: 1em;
 }
+
 #UploadBox:hover {
   opacity: 0.5;;
 }
+
 #UploadIcon {
   width: 100px;
 }
@@ -145,10 +150,10 @@ p{
 #textbox {
   opacity: 0.5;;
   max-width: 500px;
-  border-right:none;
-  border-left:none;
-  border-top:none;
-  border-bottom:1px solid #ffffff;
+  border-right: none;
+  border-left: none;
+  border-top: none;
+  border-bottom: 1px solid #ffffff;
   background-color: transparent;
   bottom: 0;
   color: #FFFFFF;
@@ -201,8 +206,9 @@ p{
   scrollbar-width: none;
   max-width: 100%;
 }
+
 #TagBtnField::-webkit-scrollbar {
-  display:none;
+  display: none;
 }
 
 #TagBtn {
@@ -212,6 +218,7 @@ p{
   height: 1.2em;
   border-radius: 5px;
 }
+
 #TagBtn:hover {
   opacity: 0.5;;
 }
@@ -222,6 +229,7 @@ p{
   margin-left: 0.5em;
   top: 0.5em;
 }
+
 #TagBtn:hover {
   opacity: 0.5;;
 }
@@ -231,37 +239,41 @@ p{
   margin-bottom: 0.5em;
 }
 
-#commentField{
+#commentField {
   display: block;
   opacity: 0.5;;
   width: auto;
-  border-right:none;
-  border-left:none;
-  border-top:none;
-  border-bottom:1px solid #ffffff;
+  border-right: none;
+  border-left: none;
+  border-top: none;
+  border-bottom: 1px solid #ffffff;
   background-color: transparent;
   bottom: 0;
   color: #FFFFFF;
   padding-left: 10px;
   padding-right: 10px;
 }
+
 #commentField::-webkit-scrollbar {
   width: 10px;
 }
+
 #commentField::-webkit-scrollbar-track {
   background: #505050;
   border-radius: 5px;
 }
+
 #commentField::-webkit-scrollbar-thumb {
   background: #aaaaaa;
   border-radius: 5px;
 }
 
-#deleteBtn{
+#deleteBtn {
   opacity: 0.2;;
   height: 30px;
   padding-left: 5px;
 }
+
 #deleteBtn:hover {
   opacity: 0.5;;
 }
@@ -330,7 +342,7 @@ export default {
     deleteFile(index) {
       this.files.splice(index, 1)
     },
-    changeComment({index,text}) {
+    changeComment({index, text}) {
       console.log(text.target.value)
       this.files[index].comment = text.target.value
     },
@@ -338,7 +350,7 @@ export default {
       return URL.createObjectURL(file)
     },
     async submit() {
-      if(!this.files.length) return
+      if (!this.files.length) return
       const user = await auth()
       const token = await user.getIdToken(true)
       await axios.post(`${this.endpoint}/v1/user`, {}, {headers: {token}})
@@ -346,29 +358,31 @@ export default {
       Promise.all(this.files.map(f => this.uploadImage(f, token))).then(async (w) => {
         const photos = w.map(res => res.data.id)
         // this.$router.push("/")
-        const {data} =  await axios.post(`${this.endpoint}/v1/moment`, {title: this.title, photos}, {headers: {token}})
+        const {data} = await axios.post(`${this.endpoint}/v1/moment`, {title: this.title, photos}, {headers: {token}})
         this.closeModal()
         this.uploadCount = 0
         this.$router.push("/moment/" + data.id)
+      }).catch(() => {
+        alert("アップロードに失敗しました")
       }).finally(() => {
-        this.files = []
-        this.isUploading = false
-      })
+          this.files = []
+          this.isUploading = false
+        })
     },
     uploadImage(file, token) {
-      return new Promise((resolve,reject) => {
+      return new Promise((resolve, reject) => {
         try {
           axios.get(`${this.endpoint}/v1/imageReq`, {headers: {token}}).then(data => {
             const params = new FormData();
             params.append('file', file);
             axios.post(data.data.result.uploadURL, params, {headers: {"content-type": 'multipart/form-data'}}).then(t => {
-              axios.post(`${this.endpoint}/v1/photo?url=${t.data.result.variants[0]}&comment=${file.comment || this.title}&tags=${JSON.stringify(this.tags)}`, {}, {headers: {token}}).then(re => {
+              axios.post(`${this.endpoint}/v1/photo`, { url:t.data.result.variants[0],comment:file.comment || this.title,tags: JSON.stringify(this.tags)}, {headers: {token}}).then(re => {
                 resolve(re)
                 this.uploadCount++
-              })
-            })
-          })
-        } catch(e) {
+              }).catch(reject)
+            }).catch(reject)
+          }).catch(reject)
+        } catch (e) {
           reject(e)
         }
       })
@@ -378,13 +392,13 @@ export default {
       this.files.push(...files)
       console.log(files)
     },
-    addTag(){
-      if(this.tmpTag.trim() && !this.tags.includes(this.tmpTag)) {
+    addTag() {
+      if (this.tmpTag.trim() && !this.tags.includes(this.tmpTag)) {
         this.tags.push(this.tmpTag)
       }
     },
-    deleteTag(index){
-      this.tags.splice(index,1)
+    deleteTag(index) {
+      this.tags.splice(index, 1)
     }
   }
 }

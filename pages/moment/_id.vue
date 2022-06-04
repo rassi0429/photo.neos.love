@@ -1,6 +1,7 @@
 <template lang="pug">
   div
     div#momentRoot(:class="{'blur': isModalOpen || isUploadModal}")
+      nuxt-link.headImg(to="/" tag="img" src="/head.png")
       nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
       img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
       img#TopGradation(src="/top_gradation.png")
