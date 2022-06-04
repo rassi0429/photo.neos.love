@@ -357,17 +357,21 @@ export default {
       })
     },
     uploadImage(file, token) {
-      return new Promise((resolve) => {
-        axios.get(`${this.endpoint}/v1/imageReq`, {headers: {token}}).then(data => {
-          const params = new FormData();
-          params.append('file', file);
-          axios.post(data.data.result.uploadURL, params, {headers: {"content-type": 'multipart/form-data'}}).then(t => {
-            axios.post(`${this.endpoint}/v1/photo?url=${t.data.result.variants[0]}&comment=${file.comment || this.title}&tags=${JSON.stringify(this.tags)}`, {}, {headers: {token}}).then(re => {
-              resolve(re)
-              this.uploadCount++
+      return new Promise((resolve,reject) => {
+        try {
+          axios.get(`${this.endpoint}/v1/imageReq`, {headers: {token}}).then(data => {
+            const params = new FormData();
+            params.append('file', file);
+            axios.post(data.data.result.uploadURL, params, {headers: {"content-type": 'multipart/form-data'}}).then(t => {
+              axios.post(`${this.endpoint}/v1/photo?url=${t.data.result.variants[0]}&comment=${file.comment || this.title}&tags=${JSON.stringify(this.tags)}`, {}, {headers: {token}}).then(re => {
+                resolve(re)
+                this.uploadCount++
+              })
             })
           })
-        })
+        } catch(e) {
+          reject(e)
+        }
       })
     },
     onFileChange(e) {
