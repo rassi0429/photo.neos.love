@@ -4,7 +4,7 @@
     upload-modal
     div#root(:class="{'blur': isModalOpen || isUploadModal}")
       img#TopGradation(src="~/assets/top_gradation.png")
-      img#headImg(src="~/assets/head.png")
+      img.headImg(src="~/assets/head.png")
       img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="~/assets/upload_btn.png")
       nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
       img#uploadBtn(v-show="!uid" @click="twitterLogin" src="~/assets/login_btn.png")
@@ -100,10 +100,10 @@ export default {
 }
 
 
-#headImg {
+.headImg {
   position: fixed;
   width: 5%;
-  opacity: 50%;
+  opacity: 0.5;;
   margin-top: 1em;
   z-index: 20;
   -webkit-user-drag: none;
@@ -121,7 +121,7 @@ export default {
   right: 10px;
   bottom: 60px;
   max-width: 50px;
-  opacity: 50%;
+  opacity: 0.5;;
   border-radius: 100%;
 }
 
@@ -134,11 +134,11 @@ export default {
   right: 10px;
   bottom: 110px;
   max-width: 50px;
-  opacity: 20%
+  opacity: 0.2;
 }
 
 #uploadBtn:hover {
-  opacity: 50%
+  opacity: 0.5;
 }
 
 #CodeBtn {
@@ -146,11 +146,11 @@ export default {
   right: 10px;
   bottom: 0px;
   max-width: 50px;
-  opacity: 20%;
+  opacity: 0.2;;
   border-radius: 100%;
 }
 #CodeBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #imageroot {

@@ -61,10 +61,10 @@ export default {
   align-items: flex-end;
 }
 
-#headImg {
+.headImg {
   position: fixed;
   width: 5%;
-  opacity: 50%;
+  opacity: 0.5;;
   margin-top: 1em;
   z-index: 20;
   -webkit-user-drag: none;
@@ -93,17 +93,17 @@ export default {
 
 #MomentTitle {
   white-space: nowrap;
-  opacity: 50%;
+  opacity: 0.5;;
   margin-left: 0.3em;
   font-family: 'Noto Sans JP', sans-serif;
   font-size: min(25px, max(3vw,10px));
   line-height: min(50px, max(5vw,20px));
 }
 
-#headImg {
+.headImg {
   position: fixed;
   width: 5%;
-  opacity: 50%;
+  opacity: 0.5;;
   margin-top: 1em;
   z-index: 20;
   -webkit-user-drag: none;
@@ -124,11 +124,11 @@ export default {
   right: 10px;
   bottom: 90px;
   max-width: 50px;
-  opacity: 20%
+  opacity: 0.2;
 }
 
 #uploadBtn:hover {
-  opacity: 50%
+  opacity: 0.5;
 }
 
 #loginBtn {
@@ -136,12 +136,12 @@ export default {
   right: 10px;
   bottom: 30px;
   max-width: 50px;
-  opacity: 50%;
+  opacity: 0.5;;
   border-radius: 100%;
 }
 
 #loginBtn:hover {
-  opacity: 90%
+  opacity: 0.9
 }
 
 .blur {

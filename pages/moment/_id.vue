@@ -107,10 +107,10 @@ export default {
   min-height: 100vh;
 }
 
-#headImg {
+.headImg {
   position: fixed;
   width: 5%;
-  opacity: 50%;
+  opacity: 0.5;;
   margin-top: 1em;
   z-index: 20;
   -webkit-user-drag: none;
@@ -121,7 +121,7 @@ export default {
   right: 10px;
   bottom: 80px;
   max-width: 50px;
-  opacity: 20%
+  opacity: 0.2;
 }
 
 #TopGradation {
@@ -139,24 +139,24 @@ export default {
 
 #date {
   color: #FFFFFF;
-  opacity: 20%;
+  opacity: 0.2;;
 }
 
 #MomentTitle {
   color: #ffffff;
   font-size: 2em;
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #shareBtn {
   margin-left: 1em;
   margin-top: 1em;
   height: 1.5em;
-  opacity: 20%;
+  opacity: 0.2;;
 }
 
 #shareBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 .blur {
@@ -171,7 +171,7 @@ export default {
   right: 10px;
   bottom: 30px;
   max-width: 50px;
-  opacity: 50%;
+  opacity: 0.5;;
   border-radius: 100%;
 }
 

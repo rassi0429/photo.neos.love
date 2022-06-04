@@ -4,7 +4,7 @@
     upload-modal
     div(:class="{'blur': isModalOpen || isUploadModal}")
       textarea#copytext(:value="'aaaa'")
-      nuxt-link#headImg(to="/" tag="img" src="~/assets/head.png")
+      nuxt-link.headImg(to="/" tag="img" src="~/assets/head.png")
       img#uploadBtn_user(v-show="uid" @click="openModal" tag="img" src="~/assets/upload_btn.png")
       img#logoutBtn(v-show="uid" @click="LogOut" src="~/assets/logout.png")
       p#counter  {{userInfo.countInfo.photo}} pictures
@@ -94,10 +94,10 @@ body {
   padding-top: 1em;
 }
 
-#headImg {
+.headImg {
   position: fixed;
   width: 5%;
-  opacity: 50%;
+  opacity: 0.5;
   margin-top: 1em;
   z-index: 20;
   -webkit-user-drag: none;
@@ -112,7 +112,7 @@ body {
 
 #UserName {
   white-space: nowrap;
-  opacity: 50%;
+  opacity: 0.5;;
   margin-left: 0.3em;
   font-family: 'Noto Sans JP', sans-serif;
   font-size: min(50px, max(5vw,20px));
@@ -120,7 +120,7 @@ body {
 }
 
 #ViewToggleBtn {
-  opacity: 50%;
+  opacity: 0.5;;
   font-size: 1em;
   user-select: none;
   -moz-user-select: none;
@@ -139,11 +139,11 @@ body {
 #MomentTitle {
   color: #ffffff;
   font-size: 2em;
-  opacity: 20%;
+  opacity: 0.2;;
 }
 
 #MomentTitle:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #logoutBtn {
@@ -151,11 +151,11 @@ body {
   right: 10px;
   bottom: 30px;
   max-width: 50px;
-  opacity: 20%;
+  opacity: 0.2;;
   border-radius: 100%;
 }
 #logoutBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #uploadBtn_user {
@@ -163,25 +163,25 @@ body {
   right: 10px;
   bottom: 90px;
   max-width: 50px;
-  opacity: 20%
+  opacity: 0.2;
 }
 
 #uploadBtn_user:hover {
-  opacity: 50%
+  opacity: 0.5;
 }
 
 #shareBtn {
   margin-left: 1em;
   top: 0.2em;
   height: 1.5em;
-  opacity: 20%;
+  opacity: 0.2;;
 }
 #shareBtn:hover {
-  opacity: 50%;
+  opacity: 0.5;;
 }
 
 #counter {
-  opacity: 20%;
+  opacity: 0.2;;
   position: fixed;
   bottom: 0%;
   right: 0%;
