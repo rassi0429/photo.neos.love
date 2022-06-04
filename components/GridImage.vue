@@ -32,7 +32,7 @@ export default {
     ...mapState("modal", ["isModalOpen", "modalData"])
   },
   methods: {
-    ...mapMutations('modal', ['openModal', "closeModal"]),
+    ...mapMutations('modal', ['openModal', "closeModal","setWidth"]),
     separate(_, rows) {
       const img = []
       for (let i = 0; i < this.images.length; i++) {
@@ -45,6 +45,7 @@ export default {
       return img
     },
     calcRows() {
+      this.setWidth(window.innerWidth)
       if (window.innerWidth > 1800) {
         this.rows = 5
       } else if (window.innerWidth > 1000) {

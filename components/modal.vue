@@ -1,11 +1,11 @@
 <template lang="pug">
   div.md(v-show="isModalOpen" @click="closeModal()")
     div.image-modal(@click.stop)
-      img#editBtn(v-if="!isEditing && (uid === modalData.author)" @click="updateEditState(true)" src="/pen.png")
-      img#deleteBtn(v-if="!isEditing && (uid === modalData.author)" @click="deletePhoto" src="/delete.png")
+      img#editBtn(v-if="!isEditing && (uid === modalData.author) && width > 768" @click="updateEditState(true)" src="/pen.png")
+      img#deleteBtn(v-if="!isEditing && (uid === modalData.author)&& width > 768" @click="deletePhoto" src="/delete.png")
       img#CloseBtn(@click="closeModal()" src="/close.png")
-      div.columns.h100.m0
-        div.column.is-9.h100.p0.center
+      div.columns.h100.m0.is-flex(:class="{'is-flex is-flex-direction-column': width < 768}")
+        div.column.is-9.p0.center
           img#ImageInModal(:src="modalData.url")
         div.column.is-3#InfoField
           p#comment(v-if="!isEditing") {{ modalData.comment }}
@@ -24,7 +24,7 @@
             div#cancelBtn
               img#cancelBtnIcon(@click="updateEditState(false)" src="/cancel.png")
               p#BtnLabel Cancel
-          div#UploadUser.is-flex
+          div.UploadUser
             | Uploaded by&nbsp;
             p#UserLink(@click="toUser(modalData.author)") {{ name }}
           p#date {{ modalData.createDate ? new Date(modalData.createDate).toLocaleDateString() + ` ` + new Date(modalData.createDate).toLocaleTimeString(): "" }}
@@ -37,7 +37,7 @@ import axios from "axios"
 export default {
   name: "PhotoViewModal",
   computed: {
-    ...mapState("modal", ["isModalOpen", "modalData", "username","isEditing","editingTag"]),
+    ...mapState("modal", ["isModalOpen", "modalData", "username","isEditing","editingTag","width"]),
     ...mapState(["endpoint"]),
     ...mapState("auth",["uid"]),
   },
@@ -138,7 +138,7 @@ p {
 
 #ImageInModal {
   max-height: 100%;
-  padding: 0px 1em 0px 0px;
+
 }
 
 #InfoField {
@@ -167,6 +167,7 @@ p {
   -ms-overflow-style: none;
   scrollbar-width: none;
   opacity: 0.5;
+  white-space: pre-line;
 }
 
 #comment::-webkit-scrollbar {
@@ -218,7 +219,7 @@ p {
   display: none;
 }
 
-#UploadUser {
+.UploadUser {
   color: #ffffff;
   position: absolute;
   bottom: 0;

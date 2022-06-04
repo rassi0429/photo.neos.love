@@ -13,7 +13,8 @@ export const state = () => ({
   },
   username: "",
   isEditing: false,
-  editingTag: []
+  editingTag: [],
+  width: 0
 })
 
 export const getters = {}
@@ -82,5 +83,8 @@ export const mutations = {
   },
   deleteTag(state,data) {
     state.editingTag.splice(data)
+  },
+  setWidth(state,data) {
+    state.width = data
   }
 }
