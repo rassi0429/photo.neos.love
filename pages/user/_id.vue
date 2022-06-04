@@ -15,8 +15,8 @@
           img#avatar(:src="userInfo.user.twitterImage.replace('_normal', '')")
           a.has-text-white#UserName(:href="'https://twitter.com/intent/user?user_id='+ userInfo.user.twitterId") {{ userInfo.user.name }}
           div.ml-auto(:class="{'oa': !momentShow,'on': momentShow}")
-            p#ViewToggleBtn(:class="{'notactive': momentShow}" @click="momentShow = !momentShow") Photos
-            p#ViewToggleBtn(:class="{'notactive': !momentShow}" @click="momentShow =  !momentShow") Moments
+            p.ViewToggleBtn(:class="{'notactive': momentShow}" @click="momentShow = !momentShow") Photos
+            p.ViewToggleBtn(:class="{'notactive': !momentShow}" @click="momentShow =  !momentShow") Moments
         div#imageGrid
           grid-image(v-if="!momentShow" :images="photos")
           div#MomentBlock(v-if="momentShow" v-for="(moment,i) in moments" :key="i")
@@ -58,7 +58,7 @@ body {
 }
 
 .notactive {
-  color: #494949;
+  color: #494949 !important;
 }
 
 .head-avatar {
@@ -119,8 +119,9 @@ body {
   line-height: min(50px, max(5vw,20px));
 }
 
-#ViewToggleBtn {
-  opacity: 0.5;;
+.ViewToggleBtn {
+  color: #dedede;
+  opacity: 0.5;
   font-size: 1em;
   user-select: none;
   -moz-user-select: none;
@@ -183,8 +184,8 @@ body {
 #counter {
   opacity: 0.2;;
   position: fixed;
-  bottom: 0%;
-  right: 0%;
+  bottom: 0;
+  right: 0;
   margin-bottom: 0.3em;
   margin-right: 1em;
 }

@@ -78,7 +78,6 @@
 
 .upload-modal {
   width: 90%;
-  background-color: black;
   max-width: 900px;
   min-width: 300px;
   height: 100%;
@@ -151,7 +150,7 @@ p{
   border-top:none;
   border-bottom:1px solid #ffffff;
   background-color: transparent;
-  bottom: 0px;
+  bottom: 0;
   color: #FFFFFF;
 }
 
@@ -167,8 +166,8 @@ p{
   position: absolute;
   opacity: 0.5;;
   width: 50px;
-  right: 0px;
-  bottom: 0px;
+  right: 0;
+  bottom: 0;
   margin-bottom: 0.3em;
 }
 
@@ -241,7 +240,7 @@ p{
   border-top:none;
   border-bottom:1px solid #ffffff;
   background-color: transparent;
-  bottom: 0px;
+  bottom: 0;
   color: #FFFFFF;
   padding-left: 10px;
   padding-right: 10px;

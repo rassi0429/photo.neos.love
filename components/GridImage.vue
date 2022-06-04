@@ -72,7 +72,7 @@ export default {
   flex-wrap: wrap;
   flex-direction: column;
   align-content: flex-start;
-  gap: 4px 0px;
+  gap: 4px 0;
   margin-right: 4px;
 }
 

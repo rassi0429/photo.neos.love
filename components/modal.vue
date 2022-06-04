@@ -147,8 +147,8 @@ p {
 
 #CloseBtn {
   position: absolute;
-  bottom: 0%;
-  right: 0%;
+  bottom: 0;
+  right: 0;
   margin-bottom: 0.8em;
   margin-right: 0.8em;
   max-width: 30px;
@@ -166,7 +166,7 @@ p {
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  opacity: 0.5;;
+  opacity: 0.5;
 }
 
 #comment::-webkit-scrollbar {
@@ -175,8 +175,8 @@ p {
 
 #deleteBtn {
   position: absolute;
-  top: 0%;
-  right: 0%;
+  top: 0;
+  right: 0;
   margin-top: 4em;
   margin-right: 1em;
   max-width: 30px;
@@ -190,8 +190,8 @@ p {
 
 #editBtn {
   position: absolute;
-  top: 0%;
-  right: 0%;
+  top: 0;
+  right: 0;
   margin-top: 0.8em;
   margin-right: 0.8em;
   max-width: 30px;
@@ -221,7 +221,7 @@ p {
 #UploadUser {
   color: #ffffff;
   position: absolute;
-  bottom: 0%;
+  bottom: 0;
   margin-bottom: 3em;
   opacity: 0.5;;
 }
@@ -275,7 +275,7 @@ p {
 
 #date {
   position: absolute;
-  bottom: 0%;
+  bottom: 0;
   margin-bottom: 1.5em;
   opacity: 0.5;;
 }

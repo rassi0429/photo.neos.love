@@ -144,7 +144,7 @@ export default {
 #CodeBtn {
   position: fixed;
   right: 10px;
-  bottom: 0px;
+  bottom: 0;
   max-width: 50px;
   opacity: 0.2;;
   border-radius: 100%;
