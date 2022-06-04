@@ -25,10 +25,11 @@
         div.control
           input#textbox(v-model="tmpTag")
           img#AddTagBtn(@click="addTag(); tmpTag = ''" src="/plus.png")
-
-        img#SubmitBtn(@click="submit" src="/upload_btn.png")
+        div#SubmitBtn
+          img(@click="submit" src="/upload_btn.png")
+          p#UploadBtnLabel Upload
       div.column.is-7(v-if="!isUploading")
-        p.subtitle {{ this.files.length }} images
+        p#ImageCounter {{ this.files.length }} images
         div.upload-img
           div.is-flex(v-for="(file,index) in files" :key="index" )
             div.is-flex-1
@@ -36,13 +37,26 @@
             div.is-flex-3.is-flex
               textarea.is-flex-grow-1#commentField(type="text" @change="(text) => changeComment({text,index})" placeholder="comment")
               img#deleteBtn(@click="deleteFile(index)" src="/delete.png")
-      div.column.is-5(v-if="isUploading")
-        p.title uploading...  {{ uploadCount }} / {{ files.length }}
+      div.h100.p0.center#uploadingAnims(v-if="isUploading")
+        div
+          img#loadIcon(src="/load.png")
+          p#uploadingInfo uploading...  {{ uploadCount }} / {{ files.length }}
 </template>
 <style>
 .upload-img {
-  max-height: 80%;
+  max-height: 85%;
   overflow-y: scroll;
+}
+.upload-img::-webkit-scrollbar {
+  width: 10px;
+}
+.upload-img::-webkit-scrollbar-track {
+  background: #505050;
+  border-radius: 5px;
+}
+.upload-img::-webkit-scrollbar-thumb {
+  background: #aaaaaa;
+  border-radius: 5px;
 }
 
 .is-flex-1 {
@@ -80,6 +94,20 @@
 
 p{
   color: #FFFFFF;
+}
+
+.h100 {
+  height: 100%;
+}
+
+.p0 {
+  padding: 0;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #EditField {
@@ -141,10 +169,19 @@ p{
   width: 50px;
   right: 0px;
   bottom: 0px;
+  margin-bottom: 0.3em;
 }
 
 #SubmitBtn:hover {
   opacity: 80%;
+}
+
+#UploadBtnLabel {
+  margin-top: -1em;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 #CloseBtn {
@@ -190,6 +227,11 @@ p{
   opacity: 50%;
 }
 
+#ImageCounter {
+  opacity: 50%;
+  margin-bottom: 0.5em;
+}
+
 #commentField{
   display: block;
   opacity: 50%;
@@ -203,7 +245,18 @@ p{
   color: #FFFFFF;
   padding-left: 10px;
   padding-right: 10px;
-  }
+}
+#commentField::-webkit-scrollbar {
+  width: 10px;
+}
+#commentField::-webkit-scrollbar-track {
+  background: #505050;
+  border-radius: 5px;
+}
+#commentField::-webkit-scrollbar-thumb {
+  background: #aaaaaa;
+  border-radius: 5px;
+}
 
 #deleteBtn{
   opacity: 20%;
@@ -217,6 +270,24 @@ p{
 #CloseBtn:hover {
   opacity: 50%;
 }
+
+#uploadingAnims {
+  text-align: center;
+  margin: 0px auto;
+}
+
+#loadIcon {
+  opacity: 50%;
+  width: 80px;
+  max-height: 30%;
+  padding: 0px;
+}
+
+#uploadingInfo {
+  text-align: center;
+  opacity: 50%;
+}
+
 </style>
 <script>
 import axios from "axios";

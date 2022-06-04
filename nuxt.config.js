@@ -54,7 +54,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     'nuxt-webfontloader'
-  ], 
+  ],
   webfontloader: {
     google: {
       families: ['Lato:400,700', 'Noto+Sans+JP:400,700']

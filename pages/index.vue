@@ -8,9 +8,8 @@
       img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
       nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
       img#uploadBtn(v-show="!uid" @click="twitterLogin" src="/login_btn.png")
-      //div#test
-      //  button.button(@click="addImage") add Images)
-      //  button.button(@click="LogOut" v-show="uid") LogOut
+      a#CodeBtn(href="https://github.com/rassi0429/photo.neos.love")
+        img(src="/code.png")
       div#imageroot
         grid-image(:images="images" replace="thumbnail")
 
@@ -120,7 +119,7 @@ export default {
 #loginBtn {
   position: fixed;
   right: 10px;
-  bottom: 30px;
+  bottom: 60px;
   max-width: 50px;
   opacity: 50%;
   border-radius: 100%;
@@ -133,13 +132,25 @@ export default {
 #uploadBtn {
   position: fixed;
   right: 10px;
-  bottom: 90px;
+  bottom: 110px;
   max-width: 50px;
   opacity: 20%
 }
 
 #uploadBtn:hover {
   opacity: 50%
+}
+
+#CodeBtn {
+  position: fixed;
+  right: 10px;
+  bottom: 0px;
+  max-width: 50px;
+  opacity: 20%;
+  border-radius: 100%;
+}
+#CodeBtn:hover {
+  opacity: 50%;
 }
 
 #imageroot {

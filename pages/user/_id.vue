@@ -5,7 +5,7 @@
     div(:class="{'blur': isModalOpen || isUploadModal}")
       textarea#copytext(:value="'aaaa'")
       nuxt-link#headImg(to="/" tag="img" src="/head.png")
-      img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
+      img#uploadBtn_user(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
       img#logoutBtn(v-show="uid" @click="LogOut" src="/logout.png")
       p#counter  {{userInfo.countInfo.photo}} pictures
       div#headerBackground
@@ -158,7 +158,7 @@ body {
   opacity: 50%;
 }
 
-#uploadBtn {
+#uploadBtn_user {
   position: fixed;
   right: 10px;
   bottom: 90px;
@@ -166,7 +166,7 @@ body {
   opacity: 20%
 }
 
-#uploadBtn:hover {
+#uploadBtn_user:hover {
   opacity: 50%
 }
 
@@ -198,6 +198,34 @@ import UploadModal from "@/components/upload";
 export default {
   name: "UserPhotosPage",
   components: {UploadModal, PhotoViewModal },
+  async asyncData({params}) {
+    const {data} = await axios.get("https://photo-api.neos.love/v1/user/" + params.id)
+    return {preData: data}
+  },
+  head() {
+    return {
+      title: this.preData.title,
+      meta: [
+        {hid: 'description', name: 'description', content: this.preData.user.name},
+        {hid: 'og:type', property: 'og:type', content: 'website'},
+        {hid: 'og:title', property: 'og:title', content: this.preData.user.name},
+        {hid: 'og:url', property: 'og:url', content: `${this.endpoint}/user/${this.$route.params.id}`},
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: this.preData.user.twitterImage
+        },
+        {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
+        {hid: 'twitter:title', property: 'twitter:title', content: this.preData.user.name},
+        {hid: 'twitter:description', property: 'twitter:description', content: this.preData.user.name},
+        {
+          hid: 'twitter:image',
+          property: 'twitter:image',
+          content: this.preData.user.twitterImage
+        },
+      ]
+    }
+  },
   data() {
     return {
       uid: "",

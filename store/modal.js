@@ -35,11 +35,14 @@ export const actions = {
     } catch {}
   },
   async deletePhoto({commit,state,rootState}) {
-    const user = await auth()
-    if(user) {
-      const token = await user.getIdToken(true)
-      await axios.delete(`${rootState.endpoint}/v1/photo/${state.modalData.id}`, {headers: {token}})
-      location.reload()
+    const res = confirm("削除してもいいですか");
+    if(res) {
+      const user = await auth()
+      if(user) {
+        const token = await user.getIdToken(true)
+        await axios.delete(`${rootState.endpoint}/v1/photo/${state.modalData.id}`, {headers: {token}})
+        location.reload()
+      }
     }
   }
 }
