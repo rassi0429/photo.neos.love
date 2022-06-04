@@ -2,10 +2,10 @@
   div.upload-modal-wrap(v-if="isUploadModal")
     div.columns.upload-modal(@mouseup.stop)
       input(type="file" ref="file_upload" style="display: none" @change="onFileChange" multiple)
-      img#CloseBtn(@click="closeModal" src="/close.png")
+      img#CloseBtn(@click="closeModal" src="~/assets/close.png")
       div.column.is-5#EditField(v-if="!isUploading")
         div#UploadBox(@dragenter="dragEnter" @dragleave="dragLeave" @dragover.prevent @drop.prevent="dropFile" @click="$refs.file_upload.click()")
-          img#UploadIcon( src="/upload.png")
+          img#UploadIcon( src="~/assets/upload.png")
           p#UploadInfo Click or Drop a Image(s)
         div.field.is-horizontal
           .is-normal
@@ -24,9 +24,9 @@
                   | {{tag}}
         div.control
           input#textbox(v-model="tmpTag")
-          img#AddTagBtn(@click="addTag(); tmpTag = ''" src="/plus.png")
+          img#AddTagBtn(@click="addTag(); tmpTag = ''" src="~/assets/plus.png")
         div#SubmitBtn
-          img(@click="submit" src="/upload_btn.png")
+          img(@click="submit" src="~/assets/upload_btn.png")
           p#UploadBtnLabel Upload
       div.column.is-7(v-if="!isUploading")
         p#ImageCounter {{ this.files.length }} images
@@ -36,10 +36,10 @@
               img(:src="getFileUrl(file)")
             div.is-flex-3.is-flex
               textarea.is-flex-grow-1#commentField(type="text" @change="(text) => changeComment({text,index})" placeholder="comment")
-              img#deleteBtn(@click="deleteFile(index)" src="/delete.png")
+              img#deleteBtn(@click="deleteFile(index)" src="~/assets/delete.png")
       div.h100.p0.center#uploadingAnims(v-if="isUploading")
         div
-          img#loadIcon(src="/load.png")
+          img#loadIcon(src="~/assets/load.png")
           p#uploadingInfo uploading...  {{ uploadCount }} / {{ files.length }}
 </template>
 <style>

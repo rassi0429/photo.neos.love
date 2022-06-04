@@ -4,12 +4,12 @@
     upload-modal
     div(:class="{'blur': isModalOpen || isUploadModal}")
       textarea#copytext(:value="'aaaa'")
-      nuxt-link#headImg(to="/" tag="img" src="/head.png")
-      img#uploadBtn_user(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
-      img#logoutBtn(v-show="uid" @click="LogOut" src="/logout.png")
+      nuxt-link#headImg(to="/" tag="img" src="~/assets/head.png")
+      img#uploadBtn_user(v-show="uid" @click="openModal" tag="img" src="~/assets/upload_btn.png")
+      img#logoutBtn(v-show="uid" @click="LogOut" src="~/assets/logout.png")
       p#counter  {{userInfo.countInfo.photo}} pictures
       div#headerBackground
-      img#GridGradation(src="/top_gradation.png")
+      img#GridGradation(src="~/assets/top_gradation.png")
       div#content
         div.user-header.is-flex
           img#avatar(:src="userInfo.user.twitterImage.replace('_normal', '')")
@@ -21,7 +21,7 @@
           grid-image(v-if="!momentShow" :images="photos")
           div#MomentBlock(v-if="momentShow" v-for="(moment,i) in moments" :key="i")
             a#MomentTitle(:href="'/moment/'+ moment.id") {{ moment.title || "NoTitle"  }}
-            img#shareBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
+            img#shareBtn(src="~/assets/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
             grid-image#MomentPhotoGrid(:images="moment.photos")
 </template>
 <style scoped>
