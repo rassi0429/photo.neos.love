@@ -1,12 +1,13 @@
 <template lang="pug">
-  div.md(v-show="isModalOpen" @click="closeModal()")
+  div.md(v-show="isModalOpen" @click="close()")
     div.image-modal(@click.stop)
       img#editBtn(v-if="!isEditing && (uid === modalData.author) && width > 768" @click="updateEditState(true)" src="/pen.png")
       img#deleteBtn(v-if="!isEditing && (uid === modalData.author)&& width > 768" @click="deletePhoto" src="/delete.png")
-      img#CloseBtn(@click="closeModal()" src="/close.png")
+      img#CloseBtn(@click="close()" src="/close.png")
       div.columns.h100.m0.is-flex(:class="{'is-flex is-flex-direction-column': width < 768}")
         div.column.is-9.p0.center
-          img#ImageInModal(:src="isModalOpen ? modalData.url : `/load.png`")
+          img.ImageInModal(v-show="!loading" :src="modalData.url" v-on:load="load")
+          img.ImageInModal.mh100.w100.of(v-if="loading" :src="modalData.url.replace(`public`,`thumbnail`)")
         div.column.is-3#InfoField
           p#comment(v-if="!isEditing") {{ modalData.comment }}
             div(v-if="isEditing")
@@ -37,29 +38,38 @@ import axios from "axios"
 export default {
   name: "PhotoViewModal",
   computed: {
-    ...mapState("modal", ["isModalOpen", "modalData", "username","isEditing","editingTag","width"]),
+    ...mapState("modal", ["isModalOpen", "modalData", "username", "isEditing", "editingTag", "width"]),
     ...mapState(["endpoint"]),
-    ...mapState("auth",["uid"]),
+    ...mapState("auth", ["uid"]),
   },
   data() {
     return {
       name: "",
       tmpTag: "",
-      url: ""
+      url: "",
+      loading: true
     }
   },
   methods: {
-    ...mapMutations('modal', ["updateTags",'openModal', "closeModal", "openModalWithQuery","updateComment","updateEditState","deleteTag"]),
-    ...mapActions(`modal`,["updatePhoto","updateData","deletePhoto"]),
+    ...mapMutations('modal', ["updateTags", 'openModal', "closeModal", "openModalWithQuery", "updateComment", "updateEditState", "deleteTag"]),
+    ...mapActions(`modal`, ["updatePhoto", "updateData", "deletePhoto"]),
     toUser(userId) {
       this.closeModal()
       this.$router.push('/user/' + userId)
     },
     addTag() {
-      if(this.tmpTag.trim() && !this.editingTag.includes(this.tmpTag)) {
-        this.updateTags([...this.editingTag,this.tmpTag])
+      if (this.tmpTag.trim() && !this.editingTag.includes(this.tmpTag)) {
+        this.updateTags([...this.editingTag, this.tmpTag])
         this.tmpTag = ""
       }
+    },
+    load() {
+      console.log("LOAD!!")
+      this.loading = false
+    },
+    close() {
+      this.loading = true
+      this.closeModal()
     }
   },
   watch: {
@@ -99,6 +109,18 @@ export default {
   z-index: 40;
 }
 
+.hide {
+  opacity: 0;
+}
+
+.abs {
+  position: absolute;
+  left: 0;
+}
+
+.of {
+  object-fit: contain;
+}
 
 .image-modal {
   width: 100%;
@@ -116,6 +138,10 @@ export default {
 
 .h100 {
   height: 100%;
+}
+
+.mh100 {
+  max-height: 100%;
 }
 
 .w100 {
@@ -140,7 +166,7 @@ p {
   align-items: center;
 }
 
-#ImageInModal {
+.ImageInModal {
   max-height: 100%;
 
 }
@@ -215,6 +241,7 @@ p {
   scrollbar-width: none;
   opacity: 0.5;;
 }
+
 #tags > a {
   color: lightskyblue;
 }
@@ -256,9 +283,11 @@ p {
 #saveBtn {
   opacity: 0.5;;
 }
+
 #saveBtn:hover {
   opacity: 0.8;;
 }
+
 #saveBtnIcon {
   width: 50px;
 }
@@ -267,9 +296,11 @@ p {
   opacity: 0.5;;
   width: 50px;
 }
+
 #cancelBtn:hover {
   opacity: 0.8;;
 }
+
 #cancelBtnIcon {
   width: 50px;
 }
@@ -291,6 +322,7 @@ p {
   margin-left: 0.5em;
   margin-top: 0.5em;
 }
+
 #AddTagBtn:hover {
   opacity: 0.5;;
 }
@@ -309,8 +341,9 @@ p {
   scrollbar-width: none;
   max-width: 100%;
 }
+
 #TagBtnField::-webkit-scrollbar {
-  display:none;
+  display: none;
 }
 
 #TagBtn {
@@ -320,6 +353,7 @@ p {
   height: 1.2em;
   border-radius: 5px;
 }
+
 #TagBtn:hover {
   opacity: 0.5;;
 }
