@@ -40,7 +40,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: this.preData.photos[0].url
+          content: this.preData.thumbnail
         },
         {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
         {hid: 'twitter:title', property: 'twitter:title', content: this.preData.title},
@@ -48,7 +48,7 @@ export default {
         {
           hid: 'twitter:image',
           property: 'twitter:image',
-          content: this.preData.photos[0].url
+          content: this.preData.thumbnail
         },
       ]
     }
