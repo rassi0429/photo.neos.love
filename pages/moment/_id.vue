@@ -27,7 +27,8 @@ export default {
   components: {UploadModal, PhotoViewModal},
   async asyncData({params}) {
     const {data} = await axios.get("https://photo-api.neos.love/v1/moment/" + params.id)
-    return {preData: data}
+    const user = await axios.get(`https://photo-api.neos.love/v1/user/${data.author}`)
+    return {preData: data, preName: user.data.user.name}
   },
   head() {
     return {
@@ -36,7 +37,7 @@ export default {
         {hid: 'description', name: 'description', content: this.preData.title},
         {hid: 'og:type', property: 'og:type', content: 'website'},
         {hid: 'og:title', property: 'og:title', content: this.preData.title},
-        {hid: 'og:description', property: 'og:description', content: this.preData.title},
+        {hid: 'og:description', property: 'og:description', content: `${this.preName}'s Moment ${this.preData.title}`},
         {hid: 'og:url', property: 'og:url', content: `${this.endpoint}/moment/${this.$route.params.id}`},
         {
           hid: 'og:image',
@@ -45,7 +46,7 @@ export default {
         },
         {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
         {hid: 'twitter:title', property: 'twitter:title', content: this.preData.title},
-        {hid: 'twitter:description', property: 'twitter:description', content: this.preData.title},
+        {hid: 'twitter:description', property: 'twitter:description', content: `${this.preName}'s Moment ${this.preData.title}`},
         {
           hid: 'twitter:image',
           property: 'twitter:image',
