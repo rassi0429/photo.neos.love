@@ -1,0 +1,8 @@
+version : "3.7"
+services:
+  node:
+    build: .
+    ports:
+      - 127.0.0.1:3081:3081
+    init: true
+    restart: always
