@@ -54,7 +54,6 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     'nuxt-webfontloader',
-    'nuxt-lazy-load'
   ],
   webfontloader: {
     google: {

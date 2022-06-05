@@ -27,7 +27,7 @@ export default {
   name: "MomentId",
   components: {UploadModal, PhotoViewModal},
   async asyncData({params}) {
-   const {data} = await axios.get("https://photo-api.neos.love/v1/tag/" + params.id)
+   const {data} = await axios.get("https://photo-api.neos.love/v1/tag/" + encodeURI(params.id))
    return {preData: data}
   },
   head() {
