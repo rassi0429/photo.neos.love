@@ -6,7 +6,7 @@
       img#CloseBtn(@click="closeModal()" src="/close.png")
       div.columns.h100.m0.is-flex(:class="{'is-flex is-flex-direction-column': width < 768}")
         div.column.is-9.p0.center
-          img#ImageInModal(:src="modalData.url")
+          img#ImageInModal(:src="isModalOpen ? modalData.url : `/load.png`")
         div.column.is-3#InfoField
           p#comment(v-if="!isEditing") {{ modalData.comment }}
             div(v-if="isEditing")
@@ -45,6 +45,7 @@ export default {
     return {
       name: "",
       tmpTag: "",
+      url: ""
     }
   },
   methods: {
@@ -63,7 +64,10 @@ export default {
   },
   watch: {
     isModalOpen(val, old) {
-      if (!val || this.modalData.id === 0) return
+      if (!val || this.modalData.id === 0) {
+        this.url = "/load.png"
+        return
+      }
       axios.get(`${this.endpoint}/v1/user/${this.modalData?.author}`).then((res) => {
         this.name = res.data.user.name
       })
