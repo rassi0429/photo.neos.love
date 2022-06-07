@@ -22,13 +22,12 @@ export default {
       { hid: 'og:title', property: 'og:title', content: 'NeosFrames' },
       { hid: 'og:description', property: 'og:description', content: 'NeosVR Photo Upload site' },
       { hid: 'og:image', property: 'og:image', content: 'https://imagedelivery.net/n_TCh9IYDQry4G-U7jzPdQ/92a0af1c-47b8-4e3b-e422-a017de85e600/public' },
-
       { hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image' },
       { hid: 'twitter:title', property: 'twitter:title', content: 'NeosFrames' },
       { hid: 'twitter:description', property: 'twitter:description', content: 'NeosVR Photo Upload site' },
       { hid: 'twitter:image', property: 'twitter:image', content: 'https://imagedelivery.net/n_TCh9IYDQry4G-U7jzPdQ/92a0af1c-47b8-4e3b-e422-a017de85e600/public' },
     ],
-    link: [{ rel: 'icon', type: 'image/png', href: '/fav.png' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/fav.png' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -69,8 +68,9 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en',
+      lang: 'ja',
     },
+    source: '~/static/icon.png'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
