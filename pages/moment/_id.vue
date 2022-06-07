@@ -1,18 +1,14 @@
 <template lang="pug">
   div
-    div#momentRoot(:class="{'blur': isModalOpen || isUploadModal}")
-      nuxt-link.headImg(to="/" tag="img" src="/head.png")
-      nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
-      img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
-      img#TopGradation(src="/top_gradation.png")
-      div#content
-        p#date {{ formatDate(new Date(momentData.createDate)) }}
-        div.is-flex#header
-          p#MomentTitle {{ momentData.title || ""}}
-          img#shareBtn(src="/link.png", alt="link" ref="tag" @click="copyMomentUrl($route.params.id)")
-        grid-image(:images="momentData.photos")
-    photo-view-modal
-    upload-modal
+    nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
+    img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
+    img#TopGradation(src="/top_gradation.png")
+    div#content
+      p#date {{ formatDate(new Date(momentData.createDate)) }}
+      div.is-flex#header
+        p#MomentTitle {{ momentData.title || ""}}
+        img#shareBtn(src="/link.png", alt="link" ref="tag" @click="copyMomentUrl($route.params.id)")
+      grid-image(:images="momentData.photos")
 </template>
 
 <script>
@@ -25,6 +21,7 @@ import UploadModal from "@/components/upload";
 export default {
   name: "MomentId",
   components: {UploadModal, PhotoViewModal},
+  layout: "normal",
   async asyncData({params}) {
     const {data} = await axios.get("https://photo-api.neos.love/v1/moment/" + params.id)
     const user = await axios.get(`https://photo-api.neos.love/v1/user/${data.author}`)
@@ -46,7 +43,11 @@ export default {
         },
         {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
         {hid: 'twitter:title', property: 'twitter:title', content: this.preData.title},
-        {hid: 'twitter:description', property: 'twitter:description', content: `${this.preName}'s Moment ${this.preData.title}`},
+        {
+          hid: 'twitter:description',
+          property: 'twitter:description',
+          content: `${this.preName}'s Moment ${this.preData.title}`
+        },
         {
           hid: 'twitter:image',
           property: 'twitter:image',
@@ -85,7 +86,7 @@ export default {
         setTimeout(() => {
           this.$refs.tag.src = '/link.png'
         }, 2000)
-      } catch(e) {
+      } catch (e) {
         alert(`https ni site ne`)
       }
     }
@@ -105,19 +106,6 @@ export default {
 </script>
 
 <style scoped>
-#momentRoot {
-  background-color: #050505;
-  min-height: 100vh;
-}
-
-.headImg {
-  position: fixed;
-  width: 5%;
-  opacity: 0.5;;
-  margin-top: 1em;
-  z-index: 20;
-  -webkit-user-drag: none;
-}
 
 #uploadBtn {
   position: fixed;
@@ -162,12 +150,6 @@ export default {
   opacity: 0.5;;
 }
 
-.blur {
-  -webkit-filter: blur(8px);
-  -moz-filter: blur(8px);
-  -ms-filter: blur(8px);
-  filter: blur(8px);
-}
 
 #loginBtn {
   position: fixed;

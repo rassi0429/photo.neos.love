@@ -2,12 +2,6 @@
   div.container
     | HI
 </template>
-<style scoped>
-body {
-  background-color: #050505;
-  min-height: 100vh;
-}
-</style>
 <script>
 import { mapActions, mapState } from "vuex";
 

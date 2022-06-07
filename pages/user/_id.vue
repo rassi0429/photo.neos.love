@@ -1,28 +1,24 @@
 <template lang="pug">
-  div()
-    photo-view-modal
-    upload-modal
-    div(:class="{'blur': isModalOpen || isUploadModal}")
-      textarea#copytext(:value="'aaaa'")
-      nuxt-link.headImg(to="/" tag="img" src="/head.png")
-      img#uploadBtn_user(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
-      img#logoutBtn(v-show="uid" @click="LogOut" src="/logout.png")
-      p#counter  {{userInfo.countInfo.photo}} pictures
-      div#headerBackground
-      img#GridGradation(src="/top_gradation.png")
-      div#content
-        div.user-header.is-flex
-          img#avatar(:src="userInfo.user.twitterImage.replace('_normal', '')")
-          a.has-text-white#UserName(:href="'https://twitter.com/intent/user?user_id='+ userInfo.user.twitterId") {{ userInfo.user.name }}
-          div.ml-auto(:class="{'oa': !momentShow,'on': momentShow}")
-            p.ViewToggleBtn(:class="{'notactive': momentShow}" @click="momentShow = !momentShow") Photos
-            p.ViewToggleBtn(:class="{'notactive': !momentShow}" @click="momentShow =  !momentShow") Moments
-        div#imageGrid
-          grid-image(v-if="!momentShow" :images="photos")
-          div#MomentBlock(v-if="momentShow" v-for="(moment,i) in moments" :key="i")
-            a#MomentTitle(:href="'/moment/'+ moment.id") {{ moment.title || "NoTitle"  }}
-            img#shareBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
-            grid-image#MomentPhotoGrid(:images="moment.photos")
+  div
+    textarea#copytext(:value="'aaaa'")
+    img#uploadBtn_user(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
+    img#logoutBtn(v-show="uid" @click="LogOut" src="/logout.png")
+    p#counter  {{userInfo.countInfo.photo}} pictures
+    div#headerBackground
+    img#GridGradation(src="/top_gradation.png")
+    div#content
+      div.user-header.is-flex
+        img#avatar(:src="userInfo.user.twitterImage.replace('_normal', '')")
+        a.has-text-white#UserName(:href="'https://twitter.com/intent/user?user_id='+ userInfo.user.twitterId") {{ userInfo.user.name }}
+        div.ml-auto(:class="{'oa': !momentShow,'on': momentShow}")
+          p.ViewToggleBtn(:class="{'notactive': momentShow}" @click="momentShow = !momentShow") Photos
+          p.ViewToggleBtn(:class="{'notactive': !momentShow}" @click="momentShow =  !momentShow") Moments
+      div#imageGrid
+        grid-image(v-if="!momentShow" :images="photos")
+        div#MomentBlock(v-if="momentShow" v-for="(moment,i) in moments" :key="i")
+          a#MomentTitle(:href="'/moment/'+ moment.id") {{ moment.title || "NoTitle"  }}
+          img#shareBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
+          grid-image#MomentPhotoGrid(:images="moment.photos")
 </template>
 <style scoped>
 #copytext {
@@ -30,23 +26,12 @@
 }
 </style>
 <style>
-body {
-  background-color: #050505;
-  min-height: 100vh;
-  padding-bottom: 100px;
-}
-
-.blur {
-  -webkit-filter: blur(8px);
-  -moz-filter: blur(8px);
-  -ms-filter: blur(8px);
-  filter: blur(8px);
-}
 
 .oa {
   margin: 0;
   transition: all 700ms;
 }
+
 .on {
   margin: 1.5em 0;
   transition: all 700ms;
@@ -61,10 +46,6 @@ body {
   color: #494949 !important;
 }
 
-.head-avatar {
-  height: 120px;
-  border-radius: 100%;
-}
 
 .user-header {
   position: fixed;
@@ -94,14 +75,7 @@ body {
   padding-top: 1em;
 }
 
-.headImg {
-  position: fixed;
-  width: 5%;
-  opacity: 0.5;
-  margin-top: 1em;
-  z-index: 20;
-  -webkit-user-drag: none;
-}
+
 
 #avatar {
   border-radius: 100%;
@@ -115,8 +89,8 @@ body {
   opacity: 0.5;;
   margin-left: 0.3em;
   font-family: 'Noto Sans JP', sans-serif;
-  font-size: min(50px, max(5vw,20px));
-  line-height: min(50px, max(5vw,20px));
+  font-size: min(50px, max(5vw, 20px));
+  line-height: min(50px, max(5vw, 20px));
 }
 
 .ViewToggleBtn {
@@ -155,6 +129,7 @@ body {
   opacity: 0.2;;
   border-radius: 100%;
 }
+
 #logoutBtn:hover {
   opacity: 0.5;;
 }
@@ -177,6 +152,7 @@ body {
   height: 1.5em;
   opacity: 0.2;;
 }
+
 #shareBtn:hover {
   opacity: 0.5;;
 }
@@ -198,7 +174,8 @@ import UploadModal from "@/components/upload";
 
 export default {
   name: "UserPhotosPage",
-  components: {UploadModal, PhotoViewModal },
+  components: {UploadModal, PhotoViewModal},
+  layout: "normal",
   async asyncData({params}) {
     const {data} = await axios.get("https://photo-api.neos.love/v1/user/" + params.id)
     return {preData: data}
@@ -244,8 +221,8 @@ export default {
   },
   computed: {
     ...mapState(["endpoint"]),
-    ...mapState("modal",["isModalOpen"]),
-    ...mapState("upload",["isUploadModal"]),
+    ...mapState("modal", ["isModalOpen"]),
+    ...mapState("upload", ["isUploadModal"]),
   },
   async mounted() {
     this.uid = await this.getUserInfo()
@@ -257,15 +234,15 @@ export default {
     ...mapActions('auth', ['getUserInfo', "twitterLogin", "LogOut"]),
     ...mapMutations('upload', ['openModal', "closeModal"]),
     async getUserPhoto() {
-      const { data } = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/photos`)
+      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/photos`)
       return data
     },
     async getUserMoment() {
-      const { data } = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/moments`)
+      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/moments`)
       return data
     },
     async getUserTwitterInfo() {
-      const { data } = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}`)
+      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}`)
       this.userInfo = data
     },
     copyMomentUrl(id) {
@@ -275,7 +252,7 @@ export default {
         this.$refs['m' + id][0].src = '/check.png'
         setTimeout(() => {
           this.$refs['m' + id][0].src = '/link.png'
-        },2000)
+        }, 2000)
       } catch {
         alert(`https ni site ne`)
       }

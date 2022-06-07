@@ -1,21 +1,17 @@
 <template lang="pug">
   div
-    photo-view-modal
-    upload-modal
-    div#root(:class="{'blur': isModalOpen || isUploadModal}")
-      img#TopGradation(src="/top_gradation.png")
-      img.headImg(src="/head.png")
-      img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
-      nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
-      img#uploadBtn(v-show="!uid" @click="twitterLogin" src="/login_btn.png")
-      a#CodeBtn(href="https://github.com/rassi0429/photo.neos.love")
-        img(src="/code.png")
-      div#imageroot
-        grid-image(:images="images" replace="thumbnail")
+    img#TopGradation(src="/top_gradation.png")
+    img#uploadBtn(v-show="uid" @click="openModal" tag="img" src="/upload_btn.png")
+    nuxt-link#loginBtn(v-show="uid" :to="'/user/'+uid" tag="img" :src="photoUrl")
+    img#uploadBtn(v-show="!uid" @click="twitterLogin" src="/login_btn.png")
+    a#CodeBtn(href="https://github.com/rassi0429/photo.neos.love")
+      img(src="/code.png")
+    div#imageroot
+      grid-image(:images="images" replace="thumbnail")
 
 </template>
 <script>
-import { mapActions, mapState,mapMutations } from "vuex";
+import {mapActions, mapState, mapMutations} from "vuex";
 import axios from "axios";
 import auth from "@/plugins/auth";
 import PhotoViewModal from "@/components/modal";
@@ -23,7 +19,8 @@ import UploadModal from "@/components/upload";
 
 export default {
   name: 'IndexPage',
-  components: {PhotoViewModal,UploadModal},
+  components: {PhotoViewModal, UploadModal},
+  layout: "normal",
   head() {
     return {
       titleTemplate: null
@@ -50,13 +47,13 @@ export default {
     ...mapActions('auth', ['getUserInfo', "twitterLogin", "LogOut"]),
     ...mapMutations('upload', ['openModal', "closeModal"]),
     async getImage() {
-      const { data } = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}`)
+      const {data} = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}`)
       this.images = data
     },
     async addImage() {
       this.page += 1
-      const { data } = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}`)
-      if(data.length === 0) {
+      const {data} = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}`)
+      if (data.length === 0) {
         this.page -= 1
       }
       this.images.push(...data)
@@ -73,12 +70,12 @@ export default {
       return array;
     },
     async handleScroll(e) {
-      if(((document.body.clientHeight - window.innerHeight) - window.scrollY) < 100 && !this.tmpScrollState){
+      if (((document.body.clientHeight - window.innerHeight) - window.scrollY) < 100 && !this.tmpScrollState) {
         console.log(this.tmpScrollState)
         this.tmpScrollState = true
         await this.addImage()
       }
-      if (((document.body.clientHeight - window.innerHeight) - window.scrollY) > 100){
+      if (((document.body.clientHeight - window.innerHeight) - window.scrollY) > 100) {
         this.tmpScrollState = false
       }
     }
@@ -94,20 +91,6 @@ export default {
 </script>
 
 <style scoped>
-#root {
-  background-color: #050505;
-  min-height: 100vh;
-}
-
-
-.headImg {
-  position: fixed;
-  width: 5%;
-  opacity: 0.5;;
-  margin-top: 1em;
-  z-index: 20;
-  -webkit-user-drag: none;
-}
 
 #TopGradation {
   position: fixed;
@@ -149,6 +132,7 @@ export default {
   opacity: 0.2;;
   border-radius: 100%;
 }
+
 #CodeBtn:hover {
   opacity: 0.5;;
 }
@@ -157,19 +141,6 @@ export default {
   width: 80vw;
   margin: auto;
   padding-top: 5em;
-}
-
-#test {
-  position: fixed;
-  right: 0;
-  top: 100px;
-}
-
-.blur {
-  -webkit-filter: blur(8px);
-  -moz-filter: blur(8px);
-  -ms-filter: blur(8px);
-  filter: blur(8px);
 }
 
 </style>
