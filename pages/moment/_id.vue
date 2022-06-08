@@ -22,12 +22,41 @@ export default {
   name: "MomentId",
   components: {UploadModal, PhotoViewModal},
   layout: "normal",
-  async asyncData({params}) {
+  async asyncData({params, query}) {
     const {data} = await axios.get("https://photo-api.neos.love/v1/moment/" + params.id)
     const user = await axios.get(`https://photo-api.neos.love/v1/user/${data.author}`)
+    if (query.modal) {
+      const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
+      return {preData: data, prePhotoData: photo.data,preName: user.data.user.name}
+    }
     return {preData: data, preName: user.data.user.name}
   },
   head() {
+    if (this.$route.query.modal) {
+      return {
+        title: this.prePhotoData.comment,
+        meta: [
+          {hid: 'description', name: 'description', content:  this.preData.title},
+          {hid: 'og:type', property: 'og:type', content: 'website'},
+          {hid: 'og:title', property: 'og:title', content: `${this.prePhotoData.comment} - ${this.preData.title}`},
+          {hid: 'og:url', property: 'og:url', content: `${this.endpoint}/moment/${this.$route.params.id}?modal=${this.$route.query.modal}`},
+          {hid: 'og:description', property: 'og:description', content: this.preData.title},
+          {
+            hid: 'og:image',
+            property: 'og:image',
+            content: this.prePhotoData.url.replace("public","ogp")
+          },
+          {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
+          {hid: 'twitter:title', property: 'twitter:title', content: `${this.prePhotoData.comment} - ${this.preData.title}`},
+          {hid: 'twitter:description', property: 'twitter:description', content: `${this.preName}'s Moment ${this.preData.title}`},
+          {
+            hid: 'twitter:image',
+            property: 'twitter:image',
+            content: this.prePhotoData.url.replace("public","ogp")
+          },
+        ]
+      }
+    }
     return {
       title: this.preData.title,
       meta: [
