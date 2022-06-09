@@ -48,7 +48,7 @@ export default {
           },
           {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
           {hid: 'twitter:title', property: 'twitter:title', content: `${this.prePhotoData.comment} - ${this.preData.name}`},
-          {hid: 'twitter:description', property: 'twitter:description', content: this.preData.name + "'s Photo"},
+          {hid: 'twitter:description', property: 'twitter:description', content: "'" + this.preData.name + "' tags Photo"},
           {
             hid: 'twitter:image',
             property: 'twitter:image',

@@ -21,9 +21,41 @@ export default {
   name: 'IndexPage',
   components: {PhotoViewModal, UploadModal},
   layout: "normal",
+  async asyncData({params, query}) {
+    if (query.modal) {
+      const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
+      return {prePhotoData: photo.data}
+    }
+  },
   head() {
-    return {
-      titleTemplate: null
+    if (this.$route.query.modal) {
+      return {
+        title: null,
+        meta: [
+          {hid: 'description', name: 'description', content: this.prePhotoData.comment},
+          {hid: 'og:type', property: 'og:type', content: 'website'},
+          {hid: 'og:title', property: 'og:title', content: `${this.prePhotoData.comment} - NeosFrames`},
+          {hid: 'og:url', property: 'og:url', content: `${this.endpoint}/?modal=${this.$route.query.modal}`},
+          {hid: 'og:description', property: 'og:description', content: this.prePhotoData.comment},
+          {
+            hid: 'og:image',
+            property: 'og:image',
+            content: this.prePhotoData.url.replace("public","ogp")
+          },
+          {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
+          {hid: 'twitter:title', property: 'twitter:title', content: `${this.prePhotoData.comment} - NeosFrames`},
+          {hid: 'twitter:description', property: 'twitter:description', content: this.prePhotoData.comment},
+          {
+            hid: 'twitter:image',
+            property: 'twitter:image',
+            content: this.prePhotoData.url.replace("public","ogp")
+          },
+        ]
+      }
+    } else {
+      return {
+        titleTemplate : null
+      }
     }
   },
   data() {
