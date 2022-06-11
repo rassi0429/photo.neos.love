@@ -82,7 +82,7 @@ export const mutations = {
     }
   },
   deleteTag(state,data) {
-    state.editingTag.splice(data)
+    state.editingTag.splice(data, 1)
   },
   setWidth(state,data) {
     state.width = data
