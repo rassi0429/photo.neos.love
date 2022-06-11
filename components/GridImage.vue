@@ -2,7 +2,7 @@
   div
     div.grid-parent
       div.grid( v-for="(a, k) in  separate(images, rows)" :key="k" :style="{'max-width': `${100 / rows}%`}")
-        img.grid-image(:src="img.url.replace('public','thumbnail')" v-for="(img, i) in a" :key="i" @click="openModal(img)")
+        img.grid-image(:src="img.url.replace('public','thumbnail')" v-for="(img, i) in a" :key="i" :class="{'last': i === (a.length - 1)}" @click="openModal(img)")
     div.bottom_point(ref="bottomPoint")
 </template>
 

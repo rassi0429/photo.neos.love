@@ -102,12 +102,18 @@ export default {
       return array;
     },
     async handleScroll(e) {
-      if (((document.body.clientHeight - window.innerHeight) - window.scrollY) < 100 && !this.tmpScrollState) {
+      const lasts = document.getElementsByClassName("last")
+      let min = lasts[0].offsetTop
+      for(let i = 0; i < lasts.length; i++) {
+         min = Math.min(min, lasts[i].offsetTop)
+      }
+      const currentHeight = window.pageYOffset
+      if ((currentHeight + window.innerHeight) > min && !this.tmpScrollState) {
         console.log(this.tmpScrollState)
         this.tmpScrollState = true
         await this.addImage()
       }
-      if (((document.body.clientHeight - window.innerHeight) - window.scrollY) > 100) {
+      if (Math.abs((currentHeight + window.innerHeight) -  min) > 300) {
         this.tmpScrollState = false
       }
     }
