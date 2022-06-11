@@ -5,7 +5,7 @@
       img#deleteBtn(v-if="!isEditing && (uid === modalData.author)&& width > 768" @click="deletePhoto" src="/delete.png")
       img#CloseBtn(@click="close()" src="/close.png")
       div.columns.h100.m0.is-flex(:class="{'is-flex is-flex-direction-column': width < 768}")
-        div.column.is-9.p0.center
+        div.column.is-9.p0.center(:class="{'mh70': width < 768}")
           img.ImageInModal(v-show="!loading" :src="modalData.url" v-on:load="load")
           img.ImageInModal.mh100.w100.of(v-if="loading" :src="modalData.url.replace(`public`,`thumbnail`)")
         div.column.is-3#InfoField
@@ -142,6 +142,10 @@ export default {
 
 .mh100 {
   max-height: 100%;
+}
+
+.mh70 {
+  max-height: 70%;
 }
 
 .w100 {
