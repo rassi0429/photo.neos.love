@@ -35,7 +35,7 @@
             div.is-flex-1
               img(:src="getFileUrl(file)")
             div.is-flex-3.is-flex
-              textarea.is-flex-grow-1#commentField(type="text" @change="(text) => changeComment({text,index})" placeholder="comment")
+              textarea.is-flex-grow-1#commentField(type="text" :value="file.comment" @change="(text) => changeComment({text,index})" placeholder="comment")
               img#deleteBtn(@click="deleteFile(index)" src="/delete.png")
       div.h100.p0.center#uploadingAnims(v-if="isUploading")
         div
@@ -302,6 +302,7 @@ p {
 </style>
 <script>
 import axios from "axios";
+import EXIF from "exif-js";
 import {mapActions, mapState, mapMutations} from "vuex";
 import auth from "@/plugins/auth";
 
@@ -329,14 +330,48 @@ export default {
   methods: {
     ...mapActions('auth', ['getUserInfo', "twitterLogin"]),
     ...mapMutations('upload', ['closeModal']),
+    getComment(file) {
+      return new Promise((resolve) => {
+        EXIF.getData(file, function () {
+          const allMetaData = EXIF.getAllTags(this);
+          if (allMetaData.UserComment) {
+            const binary = allMetaData.UserComment.slice(8)
+            const result = []
+            for (let j = 0; j < binary.length; j += 2) {
+              result.push(binary[j] * 256 + binary[j + 1])
+            }
+            console.log(String.fromCharCode(...result))
+            resolve(JSON.parse(String.fromCharCode(...result)))
+          }
+          resolve(null)
+        });
+      })
+    },
     dragEnter() {
       this.isEnter = true;
     },
     dragLeave() {
       this.isEnter = false;
     },
-    dropFile() {
-      this.files.push(...event.dataTransfer.files)
+    async dropFile() {
+      const files = event.dataTransfer.files
+      const fileArray = Array.from(files)
+      for (const f of fileArray) {
+        const i = fileArray.indexOf(f);
+        const result = await this.getComment(f)
+        if (result) {
+          fileArray[i].comment = "taken at " + result.locationName
+          result.presentUserNameArray.forEach(k => {
+            console.log(k)
+            if (!this.tags.includes(k)) {
+              this.tags.push(k)
+            }
+          })
+        } else {
+          fileArray[i].comment = ""
+        }
+      }
+      this.files.push(...fileArray)
       this.isEnter = false;
     },
     deleteFile(index) {
@@ -377,17 +412,16 @@ export default {
             params.append('file', file);
             axios.post(data.data.result.uploadURL, params, {headers: {"content-type": 'multipart/form-data'}}).then(t => {
               axios.post(`${this.endpoint}/v1/photo`, {
-                url: t.data.result.variants.filter(k => k.includes("public"))[0],
-                comment :file.comment || this.title,
-                tags: JSON.stringify(this.tags)
-            },
-              {
-                headers: {
-                  token
+                  url: t.data.result.variants.filter(k => k.includes("public"))[0],
+                  comment: file.comment || this.title,
+                  tags: JSON.stringify(this.tags)
+                },
+                {
+                  headers: {
+                    token
+                  }
                 }
-              }
-            ).
-              then(re => {
+              ).then(re => {
                 resolve(re)
                 this.uploadCount++
               }).catch(reject)
@@ -398,10 +432,25 @@ export default {
         }
       })
     },
-    onFileChange(e) {
+    async onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files;
-      this.files.push(...files)
-      console.log(files)
+      const fileArray = Array.from(files)
+      for (const f of fileArray) {
+        const i = fileArray.indexOf(f);
+        const result = await this.getComment(f)
+        if (result) {
+          fileArray[i].comment = "taken at " + result.locationName
+          result.presentUserNameArray.forEach(k => {
+            console.log(k)
+            if (!this.tags.includes(k)) {
+              this.tags.push(k)
+            }
+          })
+        } else {
+          fileArray[i].comment = ""
+        }
+      }
+      this.files.push(...fileArray)
     },
     addTag() {
       if (this.tmpTag.trim() && !this.tags.includes(this.tmpTag)) {
