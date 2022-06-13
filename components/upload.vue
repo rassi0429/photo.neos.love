@@ -401,6 +401,7 @@ export default {
         alert("アップロードに失敗しました")
       }).finally(() => {
         this.files = []
+        this.tags = []
         this.isUploading = false
       })
     },
