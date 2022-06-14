@@ -9,7 +9,7 @@
     div#content
       div.user-header.is-flex
         img#avatar(:src="userInfo.user.twitterImage.replace('_normal', '')")
-        a.has-text-white#UserName(:href="'https://twitter.com/intent/user?user_id='+ userInfo.user.twitterId") {{ userInfo.user.name }}
+        a.has-text-white#UserName(target="_blank" :href="'https://twitter.com/i/user/'+ userInfo.user.twitterId") {{ userInfo.user.name }}
         div.ml-auto(:class="{'oa': !momentShow,'on': momentShow}")
           p.ViewToggleBtn(:class="{'notactive': momentShow}" @click="momentShow = !momentShow") Photos
           p.ViewToggleBtn(:class="{'notactive': !momentShow}" @click="momentShow =  !momentShow") Moments
