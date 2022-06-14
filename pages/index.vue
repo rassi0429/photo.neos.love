@@ -43,8 +43,8 @@ export default {
             content: this.prePhotoData?.url.replace("public","ogp")
           },
           {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
-          {hid: 'twitter:title', property: 'twitter:title', content: `${this.prePhotoData.comment} - NeosFrames`},
-          {hid: 'twitter:description', property: 'twitter:description', content: this.prePhotoData.comment},
+          {hid: 'twitter:title', property: 'twitter:title', content: `${this.prePhotoData?.comment} - NeosFrames`},
+          {hid: 'twitter:description', property: 'twitter:description', content: this.prePhotoData?.comment},
           {
             hid: 'twitter:image',
             property: 'twitter:image',
