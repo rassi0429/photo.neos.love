@@ -17,7 +17,7 @@
               input#textbox(v-model="tmpTag")
               img#AddTagBtn(:disabled="!tmpTag" @click="addTag" src="/plus.png")
           div#tags(v-for="(t,i) in modalData.tags" :key="i")
-            a(:href="'/tag/' + t.name ") {{ "#" + t.name}}
+            a(:href="'/tag/' + encodeURI(t.name) ") {{ "#" + t.name}}
           div.is-flex#editUI(v-if="isEditing")
             div#saveBtn
               img#saveBtnIcon(@click="updatePhoto();updateEditState(false)" src="/save.png")
