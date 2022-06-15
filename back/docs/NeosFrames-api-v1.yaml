@@ -1,0 +1,453 @@
+openapi: 3.1.0
+x-stoplight:
+  id: cozy5kkqz8l69
+info:
+  title: NeosFrames api v1
+  version: '1.0'
+  summary: NeosFrames API v1
+servers:
+  - url: 'https://photo-api.neos.love/v1'
+paths:
+  /user:
+    post:
+      summary: ''
+      operationId: UserData Update
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: token
+          description: firebase auth id token
+      description: update user data
+  '/user/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: ''
+      operationId: Get UserData
+      responses:
+        '200':
+          description: OK
+      description: get user infomation from id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                example-1:
+                  user:
+                    id: 1
+                    uid: RN38sx34uchTKx0Wyl43aJvpmVB3
+                    name: 天 心愛
+                    twitterId: '1434731230872813570'
+                    twitterImage: 'https://pbs.twimg.com/profile_images/1513294031702622219/bbpIy_wh_normal.jpg'
+                  countInfo:
+                    photo: 35
+                    moment: 5
+              properties:
+                user:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    uid:
+                      type: string
+                      description: firebase userid
+                    name:
+                      type: string
+                    twitterId:
+                      type: string
+                    twitterImage:
+                      type: string
+                countInfo:
+                  type: object
+                  properties:
+                    photo:
+                      type: integer
+                    moment:
+                      type: integer
+            examples: {}
+      parameters:
+        - schema:
+            type: boolean
+          in: query
+          name: emap
+  '/user/{id}/photos':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get User Photo
+      tags: []
+      responses: {}
+      operationId: get-user-id-photos
+      description: get all photo from userid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  url:
+                    type: string
+                  author:
+                    type: string
+                  comment:
+                    type: string
+                  createDate:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        thumbnail:
+                          type: string
+            examples: {}
+      parameters:
+        - schema:
+            type: boolean
+          in: query
+          name: emap
+  '/user/{id}/moments':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get User Moments
+      tags: []
+      responses: {}
+      operationId: get-user-id-moments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  author:
+                    type: string
+                  thumbnail:
+                    type: string
+                  createDate:
+                    type: string
+                  photos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        url:
+                          type: string
+                        author:
+                          type: string
+                        comment:
+                          type: string
+                        createDate:
+                          type: string
+            examples: {}
+      description: get all moments from userid
+      parameters:
+        - schema:
+            type: boolean
+          in: query
+          name: emap
+  /moment:
+    post:
+      summary: ''
+      operationId: Create New Moment
+      responses:
+        '200':
+          description: OK
+      description: create new moment
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: token
+          description: firebase auth token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                photos:
+                  type: array
+                  items:
+                    type: number
+  '/moment/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get Moment from Id
+      tags: []
+      responses: {}
+      operationId: get-moment-id
+      description: get moment from id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                title:
+                  type: string
+                author:
+                  type: string
+                thumbnail:
+                  type: string
+                createDate:
+                  type: string
+                photos:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      url:
+                        type: string
+                      author:
+                        type: string
+                      comment:
+                        type: string
+                      createDate:
+                        type: string
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            thumbnail:
+                              type: string
+            examples: {}
+      parameters:
+        - schema:
+            type: boolean
+          in: query
+          name: emap
+  /photo:
+    post:
+      summary: ''
+      operationId: Create Photo
+      responses:
+        '200':
+          description: OK
+      description: create photo
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: token
+          description: firebase auth token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                comment:
+                  type: string
+                tags:
+                  type: string
+  '/photo/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get Photo from Id
+      tags: []
+      responses: {}
+      operationId: get-photo-id
+      description: get photo from id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                url:
+                  type: string
+                author:
+                  type: string
+                comment:
+                  type: string
+                createDate:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      thumbnail:
+                        type: string
+            examples: {}
+      parameters:
+        - schema:
+            type: boolean
+          in: query
+          name: emap
+    post:
+      summary: ''
+      operationId: Update Photo from Id
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      description: update photo from id
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: token
+          description: firebase auth token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+    delete:
+      summary: ''
+      operationId: Delete Photo
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: token
+          description: firebase auth token
+      description: delete token from id
+  /photos:
+    get:
+      summary: Get Photos
+      tags: []
+      responses: {}
+      operationId: get-photos
+      description: get photos
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: limit
+        - schema:
+            type: string
+          in: query
+          name: page
+        - schema:
+            type: array
+          in: query
+          name: tags
+        - schema:
+            type: string
+          in: query
+          name: uid
+        - schema:
+            type: boolean
+          in: query
+          name: emap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  url:
+                    type: string
+                  author:
+                    type: string
+                  comment:
+                    type: string
+                  createDate:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        thumbnail:
+                          type: string
+            examples: {}
+  /imageReq:
+    get:
+      summary: Get Photo upload URL
+      tags: []
+      responses: {}
+      operationId: get-imageReq
+      description: upload image request
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: token
+          description: firebase auth token
+components:
+  schemas: {}

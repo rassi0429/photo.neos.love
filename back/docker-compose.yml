@@ -1,0 +1,25 @@
+version : "3.7"
+services:
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - 127.0.0.1:3388:3306
+    volumes:
+      - ./mariadb:/docker-entrypoint-initdb.d
+      - ./dbdata:/var/lib/mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --max_allowed_packet=2G --innodb-buffer-pool-size=2G
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=photo
+      - MYSQL_USER=neos
+      - MYSQL_PASSWORD=password
+  node:
+    build: .
+    ports:
+      - 127.0.0.1:3080:3080
+    init: true
+    restart: always
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
