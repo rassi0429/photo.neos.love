@@ -30,7 +30,6 @@ export default {
   head() {
     if (this.$route.query.modal) {
       return {
-        title: null,
         meta: [
           {hid: 'description', name: 'description', content: this.prePhotoData?.comment},
           {hid: 'og:type', property: 'og:type', content: 'website'},
@@ -54,7 +53,7 @@ export default {
       }
     } else {
       return {
-        titleTemplate : null
+        titleTemplate : "NeosFrames"
       }
     }
   },

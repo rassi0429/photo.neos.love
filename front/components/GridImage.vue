@@ -79,6 +79,6 @@ export default {
 
 .grid-image {
   width: 100%;
-  max-height: 500px;
+  max-height: 2000px;
 }
 </style>

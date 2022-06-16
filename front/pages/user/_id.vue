@@ -186,51 +186,50 @@ export default {
   head() {
     if (this.$route.query.modal) {
       return {
-        title: this.prePhotoData.comment,
         meta: [
           {hid: 'description', name: 'description', content: this.preData.user.name + "'s Photo"},
           {hid: 'og:type', property: 'og:type', content: 'website'},
-          {hid: 'og:title', property: 'og:title', content: `${this.prePhotoData.comment} - ${this.preData.user.name}`},
+          {hid: 'og:title', property: 'og:title', content: `${this.prePhotoData?.comment} - ${this.preData.user.name}`},
           {hid: 'og:url', property: 'og:url', content: `${this.endpoint}/user/${this.$route.params.id}?modal=${this.$route.query.modal}`},
-          {hid: 'og:description', property: 'og:description', content: this.preData.user.name + "'s Photo"},
+          {hid: 'og:description', property: 'og:description', content: this.preData?.user.name + "'s Photo"},
           {
             hid: 'og:image',
             property: 'og:image',
-            content: this.prePhotoData.url.replace("public","ogp")
+            content: this.prePhotoData?.url.replace("public","ogp")
           },
           {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
-          {hid: 'twitter:title', property: 'twitter:title', content: `${this.prePhotoData.comment} - ${this.preData.user.name}`},
-          {hid: 'twitter:description', property: 'twitter:description', content: this.preData.user.name + "'s Photo"},
+          {hid: 'twitter:title', property: 'twitter:title', content: `${this.prePhotoData?.comment} - ${this.preData?.user.name}`},
+          {hid: 'twitter:description', property: 'twitter:description', content: this.preData?.user.name + "'s Photo"},
           {
             hid: 'twitter:image',
             property: 'twitter:image',
-            content: this.prePhotoData.url.replace("public","ogp")
+            content: this.prePhotoData?.url.replace("public","ogp")
           },
         ]
       }
     }
     return {
-      title: this.preData.title,
-      meta: [
-        {hid: 'description', name: 'description', content: this.preData.user.name},
-        {hid: 'og:type', property: 'og:type', content: 'website'},
-        {hid: 'og:title', property: 'og:title', content: `${this.preData.user.name} - NeosFrames`},
-        {hid: 'og:url', property: 'og:url', content: `${this.endpoint}/user/${this.$route.params.id}`},
-        {hid: 'og:description', property: 'og:description', content: `${this.preData.user.name}'s Photos`},
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: this.preData.user.twitterImage
-        },
-        {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
-        {hid: 'twitter:title', property: 'twitter:title', content: `${this.preData.user.name} - NeosFrames`},
-        {hid: 'twitter:description', property: 'twitter:description', content: `${this.preData.user.name}'s Photos`},
-        {
-          hid: 'twitter:image',
-          property: 'twitter:image',
-          content: this.preData.user.twitterImage
-        },
-      ]
+      title: this.preData.user.name,
+      // meta: [
+      //   {hid: 'description', name: 'description', content: this.preData.user.name},
+      //   {hid: 'og:type', property: 'og:type', content: 'website'},
+      //   {hid: 'og:title', property: 'og:title', content: `${this.preData.user.name} - NeosFrames`},
+      //   {hid: 'og:url', property: 'og:url', content: `${this.endpoint}/user/${this.$route.params.id}`},
+      //   {hid: 'og:description', property: 'og:description', content: `${this.preData.user.name}'s Photos`},
+      //   {
+      //     hid: 'og:image',
+      //     property: 'og:image',
+      //     content: this.preData.user.twitterImage
+      //   },
+      //   {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
+      //   {hid: 'twitter:title', property: 'twitter:title', content: `${this.preData.user.name} - NeosFrames`},
+      //   {hid: 'twitter:description', property: 'twitter:description', content: `${this.preData.user.name}'s Photos`},
+      //   {
+      //     hid: 'twitter:image',
+      //     property: 'twitter:image',
+      //     content: this.preData.user.twitterImage
+      //   },
+      // ]
     }
   },
   data() {

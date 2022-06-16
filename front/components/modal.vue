@@ -50,6 +50,11 @@ export default {
       loading: true
     }
   },
+  head() {
+    return {
+      title: this.modalData.comment
+    }
+  },
   methods: {
     ...mapMutations('modal', ["updateTags", 'openModal', "closeModal", "openModalWithQuery", "updateComment", "updateEditState", "deleteTag"]),
     ...mapActions(`modal`, ["updatePhoto", "updateData", "deletePhoto"]),
