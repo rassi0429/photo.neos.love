@@ -17,7 +17,7 @@ export default {
   computed: {
     ...mapState("modal", ["isModalOpen"]),
     ...mapState("upload", ["isUploadModal"])
-  }
+  },
 }
 </script>
 

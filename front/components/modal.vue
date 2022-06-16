@@ -8,16 +8,17 @@
         div.column.is-9.p0.center(:class="{'mh70': width < 768}")
           img.ImageInModal(v-show="!loading" :src="modalData.url" v-on:load="load")
           img.ImageInModal.mh100.w100.of(v-if="loading" :src="modalData.url.replace(`public`,`thumbnail`)")
-        div.column.is-3#InfoField
-          p#comment(v-if="!isEditing") {{ modalData.comment }}
-            div(v-if="isEditing")
-              textarea.w100.is-flex-grow-1#commentField(:value="modalData.comment" @change="(e) => updateComment(e.target.value)")
-              div#TagBtnField
-                button.button.is-white.is-outlined#TagBtn(v-for="(tag, ii) in editingTag" :key="ii" @click="deleteTag(ii)") {{ tag }}
-              input#textbox(v-model="tmpTag")
-              img#AddTagBtn(:disabled="!tmpTag" @click="addTag" src="/plus.png")
-          div#tags(v-for="(t,i) in modalData.tags" :key="i")
-            a(:href="'/tag/' + encodeURIComponent(t.name) ") {{ "#" + t.name}}
+        div.column.is-3#InfoField(:class="{'h30': width < 768}")
+          div.userField
+            p#comment(v-if="!isEditing") {{ modalData.comment }}
+              div(v-if="isEditing")
+                textarea.w100.is-flex-grow-1#commentField(:value="modalData.comment" @change="(e) => updateComment(e.target.value)")
+                div#TagBtnField
+                  button.button.is-white.is-outlined#TagBtn(v-for="(tag, ii) in editingTag" :key="ii" @click="deleteTag(ii)") {{ tag }}
+                input#textbox(v-model="tmpTag")
+                img#AddTagBtn(:disabled="!tmpTag" @click="addTag" src="/plus.png")
+              div#tags(v-for="(t,i) in modalData.tags" :key="i")
+                a(:href="'/tag/' + encodeURIComponent(t.name) ") {{ "#" + t.name}}
           div.is-flex#editUI(v-if="isEditing")
             div#saveBtn
               img#saveBtnIcon(@click="updatePhoto();updateEditState(false)" src="/save.png")
@@ -48,6 +49,11 @@ export default {
       tmpTag: "",
       url: "",
       loading: true
+    }
+  },
+  head() {
+    return {
+      title: this.modalData.comment
     }
   },
   methods: {
@@ -140,6 +146,10 @@ export default {
   height: 100%;
 }
 
+.h30 {
+  height: 30%;
+}
+
 .mh100 {
   max-height: 100%;
 }
@@ -162,6 +172,11 @@ export default {
 
 p {
   color: #FFFFFF;
+}
+
+.userField {
+  max-height: calc(100% - 6em);
+  overflow-y: auto;
 }
 
 .center {
