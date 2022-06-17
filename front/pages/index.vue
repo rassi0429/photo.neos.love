@@ -27,6 +27,18 @@ export default {
       return {prePhotoData: photo.data}
     }
   },
+  data() {
+    return {
+      hoge: "hage",
+      images: [],
+      rows: 4,
+      isLoggedin: false,
+      uid: "",
+      photoUrl: "",
+      tmpScrollState: false,
+      page: 0
+    }
+  },
   head() {
     if (this.$route.query.modal) {
       return {
@@ -57,22 +69,17 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      hoge: "hage",
-      images: [],
-      rows: 4,
-      isLoggedin: false,
-      uid: "",
-      photoUrl: "",
-      tmpScrollState: false,
-      page: 0
-    }
-  },
   computed: {
     ...mapState(["endpoint"]),
     ...mapState("modal", ["isModalOpen"]),
     ...mapState("upload", ["isUploadModal"])
+  },
+  async mounted() {
+    this.uid = (await this.getUserInfo())
+    const user = await auth()
+    this.photoUrl = user.photoURL
+    await this.getImage()
+    window.addEventListener('scroll', this.handleScroll);
   },
   methods: {
     ...mapActions('auth', ['getUserInfo', "twitterLogin", "LogOut"]),
@@ -104,7 +111,7 @@ export default {
       const lasts = document.getElementsByClassName("last")
       let min = lasts[0].offsetTop
       for(let i = 0; i < lasts.length; i++) {
-         min = Math.min(min, lasts[i].offsetTop)
+        min = Math.min(min, lasts[i].offsetTop)
       }
       const currentHeight = window.pageYOffset
       if ((currentHeight + window.innerHeight) > min && !this.tmpScrollState) {
@@ -116,13 +123,6 @@ export default {
         this.tmpScrollState = false
       }
     }
-  },
-  async mounted() {
-    this.uid = (await this.getUserInfo())
-    const user = await auth()
-    this.photoUrl = user.photoURL
-    await this.getImage()
-    window.addEventListener('scroll', this.handleScroll);
   }
 }
 </script>

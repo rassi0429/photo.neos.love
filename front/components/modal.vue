@@ -39,11 +39,6 @@ import axios from "axios"
 
 export default {
   name: "PhotoViewModal",
-  computed: {
-    ...mapState("modal", ["isModalOpen", "modalData", "username", "isEditing", "editingTag", "width"]),
-    ...mapState(["endpoint"]),
-    ...mapState("auth", ["uid"]),
-  },
   data() {
     return {
       name: "",
@@ -55,6 +50,35 @@ export default {
   head() {
     return {
       title: this.modalData.comment
+    }
+  },
+  computed: {
+    ...mapState("modal", ["isModalOpen", "modalData", "username", "isEditing", "editingTag", "width"]),
+    ...mapState(["endpoint"]),
+    ...mapState("auth", ["uid"]),
+  },
+  watch: {
+    isModalOpen(val, old) {
+      if (!val || this.modalData.id === 0) {
+        this.url = "/load.png"
+        return
+      }
+      axios.get(`${this.endpoint}/v1/user/${this.modalData?.author}`).then((res) => {
+        this.name = res.data.user.name
+      })
+      this.updateData()
+    }
+  },
+  async mounted() {
+    if (this.$route.query.modal) {
+      console.log(this.modalData)
+      try {
+        const {data} = await axios.get(`${this.endpoint}/v1/photo/${this.$route.query.modal}`)
+        this.openModal(data)
+      } catch {
+        console.log("fetch error")
+        this.$router.replace({'query': null});
+      }
     }
   },
   methods: {
@@ -86,30 +110,6 @@ export default {
         title: this.modalData?.comment,
         name: this.name,
       });
-    }
-  },
-  watch: {
-    isModalOpen(val, old) {
-      if (!val || this.modalData.id === 0) {
-        this.url = "/load.png"
-        return
-      }
-      axios.get(`${this.endpoint}/v1/user/${this.modalData?.author}`).then((res) => {
-        this.name = res.data.user.name
-      })
-      this.updateData()
-    }
-  },
-  async mounted() {
-    if (this.$route.query.modal) {
-      console.log(this.modalData)
-      try {
-        const {data} = await axios.get(`${this.endpoint}/v1/photo/${this.$route.query.modal}`)
-        this.openModal(data)
-      } catch {
-        console.log("fetch error")
-        this.$router.replace({'query': null});
-      }
     }
   }
 }
@@ -401,4 +401,5 @@ p {
 #TagBtn:hover {
   opacity: 0.5;;
 }
+
 </style>
