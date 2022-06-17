@@ -25,8 +25,6 @@
 #copytext {
   display: none;
 }
-</style>
-<style>
 
 .oa {
   margin: 0;

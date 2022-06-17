@@ -2,7 +2,7 @@
   div
     photo-view-modal
     upload-modal
-    nuxt-link.headImg(to="/" tag="img" src="/head.png")
+    nuxt-link.headImg(to="/" tag="img" src="/head.png" :class="{'blur': isModalOpen || isUploadModal}")
     Nuxt(:class="{'blur': isModalOpen || isUploadModal}")
 </template>
 
