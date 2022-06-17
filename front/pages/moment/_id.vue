@@ -7,7 +7,8 @@
       p#date {{ formatDate(new Date(momentData.createDate)) }}
       div.is-flex#header
         p#MomentTitle {{ momentData.title || ""}}
-        img#shareBtn(src="/link.png", alt="link" ref="tag" @click="copyMomentUrl($route.params.id)")
+        img#linkBtn(src="/link.png", alt="link" ref="tag" @click="copyMomentUrl($route.params.id)")
+        img#twShareBtn(src="/tw.png", alt="share" @click="openTwitterShare($route.params.id)")
       grid-image(:images="momentData.photos")
 </template>
 
@@ -118,6 +119,17 @@ export default {
       } catch (e) {
         alert(`https ni site ne`)
       }
+    },
+    openTwitterShare(id) {
+      const share = 'https://twitter.com/share';
+      const text = '?text=今日のNeosVR'; // ToDo:タイトル
+      const url = `&url=https://photo.neos.love/moment/${id}`;
+      const tag = '&hashtags=NeosFrames';
+      try {
+        window.open(share+text+url+tag, '_blank');
+      } catch (e) {
+        // empty
+      }
     }
   },
   computed: {
@@ -168,14 +180,14 @@ export default {
   opacity: 0.5;;
 }
 
-#shareBtn {
+#linkBtn, #twShareBtn {
   margin-left: 1em;
   margin-top: 1em;
   height: 1.5em;
   opacity: 0.2;;
 }
 
-#shareBtn:hover {
+#linkBtn:hover, #twShareBtn:hover {
   opacity: 0.5;;
 }
 

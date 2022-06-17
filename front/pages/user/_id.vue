@@ -17,7 +17,7 @@
         grid-image(v-if="!momentShow" :images="photos")
         div#MomentBlock(v-if="momentShow" v-for="(moment,i) in moments" :key="i")
           a#MomentTitle(:href="'/moment/'+ moment.id") {{ moment.title || "NoTitle"  }}
-          img#shareBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
+          img#linkBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
           grid-image#MomentPhotoGrid(:images="moment.photos")
 </template>
 <style scoped>
@@ -145,14 +145,14 @@
   opacity: 0.5;
 }
 
-#shareBtn {
+#linkBtn {
   margin-left: 1em;
   top: 0.2em;
   height: 1.5em;
   opacity: 0.2;;
 }
 
-#shareBtn:hover {
+#linkBtn:hover {
   opacity: 0.5;;
 }
 
