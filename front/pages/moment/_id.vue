@@ -7,7 +7,8 @@
       p#date {{ formatDate(new Date(momentData.createDate)) }}
       div.is-flex#header
         p#MomentTitle {{ momentData.title || ""}}
-        img#shareBtn(src="/link.png", alt="link" ref="tag" @click="copyMomentUrl($route.params.id)")
+        img#linkBtn(src="/link.png", alt="link" ref="tag" @click="copyMomentUrl($route.params.id)")
+        img#twShareBtn(src="/tw.png", alt="share" @click="shareTwitter()")
       grid-image(:images="momentData.photos")
 </template>
 
@@ -118,6 +119,15 @@ export default {
       } catch (e) {
         alert(`https ni site ne`)
       }
+    },
+    shareTwitter() {
+      this.$openTwitterShare({
+        type: 'moment',
+        id: this.momentData?.id,
+        pageUrl: location.href,
+        name: this.preName,
+        title: this.momentData?.title
+      });
     }
   },
   computed: {
@@ -168,14 +178,14 @@ export default {
   opacity: 0.5;;
 }
 
-#shareBtn {
+#linkBtn, #twShareBtn {
   margin-left: 1em;
   margin-top: 1em;
   height: 1.5em;
   opacity: 0.2;;
 }
 
-#shareBtn:hover {
+#linkBtn:hover, #twShareBtn:hover {
   opacity: 0.5;;
 }
 

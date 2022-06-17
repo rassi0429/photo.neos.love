@@ -3,7 +3,8 @@
     div.image-modal(@click.stop)
       img#editBtn(v-if="!isEditing && (uid === modalData.author) && width > 768" @click="updateEditState(true)" src="/pen.png")
       img#deleteBtn(v-if="!isEditing && (uid === modalData.author)&& width > 768" @click="deletePhoto" src="/delete.png")
-      img#CloseBtn(@click="close()" src="/close.png")
+      img#twShareBtn(@click="shareTwitter()" src="/tw.png")
+      img#closeBtn(@click="close()" src="/close.png")
       div.columns.h100.m0.is-flex(:class="{'is-flex is-flex-direction-column': width < 768}")
         div.column.is-9.p0.center(:class="{'mh70': width < 768}")
           img.ImageInModal(v-show="!loading" :src="modalData.url" v-on:load="load")
@@ -76,6 +77,15 @@ export default {
     close() {
       this.loading = true
       this.closeModal()
+    },
+    shareTwitter() {
+      this.$openTwitterShare({
+        type: 'modal',
+        id: this.modalData?.id,
+        pageUrl: location.href,
+        title: this.modalData?.comment,
+        name: this.name,
+      });
     }
   },
   watch: {
@@ -194,7 +204,22 @@ p {
   position: relative;
 }
 
-#CloseBtn {
+#twShareBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-bottom: 4em;
+  margin-right: 0.6em;
+  max-width: 35px;
+  opacity: 0.2;;
+  z-index: 10;
+}
+
+#twShareBtn:hover {
+  opacity: 0.5;;
+}
+
+#closeBtn {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -205,7 +230,7 @@ p {
   z-index: 10;
 }
 
-#CloseBtn:hover {
+#closeBtn:hover {
   opacity: 0.5;;
 }
 
