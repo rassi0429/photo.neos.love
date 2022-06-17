@@ -8,7 +8,7 @@
       div.is-flex#header
         p#MomentTitle {{ momentData.title || ""}}
         img#linkBtn(src="/link.png", alt="link" ref="tag" @click="copyMomentUrl($route.params.id)")
-        img#twShareBtn(src="/tw.png", alt="share" @click="openTwitterShare($route.params.id)")
+        img#twShareBtn(src="/tw.png", alt="share" @click="shareTwitter()")
       grid-image(:images="momentData.photos")
 </template>
 
@@ -120,16 +120,14 @@ export default {
         alert(`https ni site ne`)
       }
     },
-    openTwitterShare(id) {
-      const url = 'https://twitter.com/share'
-                + '?text=今日のNeosVR' // ToDo:タイトル
-                + `&url=https://photo.neos.love/moment/${id}`
-                + '&hashtags=NeosFrames';
-      try {
-        window.open(url, '_blank');
-      } catch (e) {
-        // empty
-      }
+    shareTwitter() {
+      this.$openTwitterShare({
+        type: 'moment',
+        id: this.momentData?.id,
+        pageUrl: location.href,
+        name: this.preName,
+        title: this.momentData?.title
+      });
     }
   },
   computed: {
