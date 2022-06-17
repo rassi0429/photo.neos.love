@@ -64,29 +64,29 @@ export default {
         ]
       }
     }
-    // return {
-    //   title: this.preData.name,
-    //   meta: [
-    //     {hid: 'description', name: 'description', content: this.preData?.name},
-    //     {hid: 'og:type', property: 'og:type', content: 'website'},
-    //     {hid: 'og:title', property: 'og:title', content: "Tag: " + this.preData?.name},
-    //     {hid: 'og:description', property: 'og:description', content: "Tag: " + this.preData?.name},
-    //     {hid: 'og:url', property: 'og:url', content: `${this.endpoint}/tag/${this.$route.params.id}`},
-    //     {
-    //       hid: 'og:image',
-    //       property: 'og:image',
-    //       content: this.preData?.thumbnail || "https://imagedelivery.net/n_TCh9IYDQry4G-U7jzPdQ/66d52fd1-26a8-4b4f-ad5f-c6d59da6f100/thumbnail"
-    //     },
-    //     {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
-    //     {hid: 'twitter:title', property: 'twitter:title', content: "Tag: " + this.preData?.name},
-    //     {hid: 'twitter:description', property: 'twitter:description', content: "Tag: " + this.preData?.name},
-    //     {
-    //       hid: 'twitter:image',
-    //       property: 'twitter:image',
-    //       content: this.preData?.thumbnail || "https://imagedelivery.net/n_TCh9IYDQry4G-U7jzPdQ/66d52fd1-26a8-4b4f-ad5f-c6d59da6f100/thumbnail"
-    //     },
-    //   ]
-    // }
+     return {
+       title: this.preData.name,
+       meta: [
+         {hid: 'description', name: 'description', content: this.preData?.name},
+         {hid: 'og:type', property: 'og:type', content: 'website'},
+         {hid: 'og:title', property: 'og:title', content: "Tag: " + this.preData?.name},
+         {hid: 'og:description', property: 'og:description', content: "Tag: " + this.preData?.name},
+         {hid: 'og:url', property: 'og:url', content: `${this.endpoint}/tag/${this.$route.params.id}`},
+         {
+           hid: 'og:image',
+           property: 'og:image',
+           content: this.preData?.thumbnail || "https://imagedelivery.net/n_TCh9IYDQry4G-U7jzPdQ/66d52fd1-26a8-4b4f-ad5f-c6d59da6f100/thumbnail"
+         },
+         {hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image'},
+         {hid: 'twitter:title', property: 'twitter:title', content: "Tag: " + this.preData?.name},
+         {hid: 'twitter:description', property: 'twitter:description', content: "Tag: " + this.preData?.name},
+         {
+           hid: 'twitter:image',
+           property: 'twitter:image',
+           content: this.preData?.thumbnail || "https://imagedelivery.net/n_TCh9IYDQry4G-U7jzPdQ/66d52fd1-26a8-4b4f-ad5f-c6d59da6f100/thumbnail"
+         },
+       ]
+     }
   },
   computed: {
     ...mapState(["endpoint"]),
