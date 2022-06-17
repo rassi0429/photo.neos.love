@@ -121,12 +121,12 @@ export default {
       }
     },
     openTwitterShare(id) {
-      const share = 'https://twitter.com/share';
-      const text = '?text=今日のNeosVR'; // ToDo:タイトル
-      const url = `&url=https://photo.neos.love/moment/${id}`;
-      const tag = '&hashtags=NeosFrames';
+      const url = 'https://twitter.com/share'
+                + '?text=今日のNeosVR' // ToDo:タイトル
+                + `&url=https://photo.neos.love/moment/${id}`
+                + '&hashtags=NeosFrames';
       try {
-        window.open(share+text+url+tag, '_blank');
+        window.open(url, '_blank');
       } catch (e) {
         // empty
       }
