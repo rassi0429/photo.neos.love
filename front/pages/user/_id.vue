@@ -17,7 +17,8 @@
         grid-image(v-if="!momentShow" :images="photos")
         div#MomentBlock(v-if="momentShow" v-for="(moment,i) in moments" :key="i")
           a#MomentTitle(:href="'/moment/'+ moment.id") {{ moment.title || "NoTitle"  }}
-          img#shareBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
+          img#linkBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
+          img#twShareBtn(src="/tw.png", alt="share" @click="shareTwitter()")
           grid-image#MomentPhotoGrid(:images="moment.photos")
 </template>
 <style scoped>
@@ -145,14 +146,14 @@
   opacity: 0.5;
 }
 
-#shareBtn {
+#linkBtn, #twShareBtn {
   margin-left: 1em;
   top: 0.2em;
   height: 1.5em;
   opacity: 0.2;;
 }
 
-#shareBtn:hover {
+#linkBtn:hover, #twShareBtn:hover {
   opacity: 0.5;;
 }
 
@@ -283,6 +284,15 @@ export default {
       } catch {
         alert(`https ni site ne`)
       }
+    },
+    shareTwitter() {
+      this.$openTwitterShare({
+        type: 'moment',
+        id: this.preData?.user.id,
+        pageUrl: location.href,
+        name: this.preData?.user.name,
+        title: this.prePhotoData?.comment
+      });
     }
   }
 }
