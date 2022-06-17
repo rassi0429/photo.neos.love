@@ -21,7 +21,7 @@ services:
       - MYSQL_USER=neos
       - MYSQL_PASSWORD=password
   back-node:
-    build: .
+    build: back
     ports:
       - 127.0.0.1:3080:3080
     init: true
