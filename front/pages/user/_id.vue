@@ -18,7 +18,7 @@
         div#MomentBlock(v-if="momentShow" v-for="(moment,i) in moments" :key="i")
           a#MomentTitle(:href="'/moment/'+ moment.id") {{ moment.title || "NoTitle"  }}
           img#linkBtn(src="/link.png", alt="link" :ref="'m' + moment.id" @click="copyMomentUrl(moment.id)")
-          img#twShareBtn(src="/tw.png", alt="share" @click="shareTwitter()")
+          img#twShareBtn(src="/tw.png", alt="share" @click="shareTwitter(moment)")
           grid-image#MomentPhotoGrid(:images="moment.photos")
 </template>
 <script>
@@ -140,13 +140,12 @@ export default {
         alert(`https ni site ne`)
       }
     },
-    shareTwitter() {
+    shareTwitter({id, title}) {
       this.$openTwitterShare({
         type: 'moment',
-        id: this.preData?.user.id,
-        pageUrl: location.href,
+        id,
         name: this.preData?.user.name,
-        title: this.prePhotoData?.comment
+        title
       });
     }
   }
