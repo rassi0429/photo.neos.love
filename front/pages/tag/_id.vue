@@ -31,6 +31,13 @@ export default {
     }
     return {preData: data}
   },
+  data() {
+    return {
+      uid: "",
+      images: [],
+      photoUrl: ""
+    }
+  },
   head() {
     if (this.$route.query.modal) {
       return {
@@ -81,16 +88,15 @@ export default {
     //   ]
     // }
   },
-  data() {
-    return {
-      uid: "",
-      images: [],
-      photoUrl: ""
-    }
-  },
   computed: {
     ...mapState(["endpoint"]),
     ...mapState(`upload`, ["isUploadModal"])
+  },
+  async mounted() {
+    this.loadImage()
+    this.uid = (await this.getUserInfo())
+    const user = await auth()
+    this.photoUrl = user.photoURL
   },
   methods: {
     ...mapMutations(`upload`, ["openModal"]),
@@ -99,12 +105,6 @@ export default {
       const {data} = await axios.get(`${this.endpoint}/v1/tag/${this.$route.params.id}`)
       this.images = data.photos
     }
-  },
-  async mounted() {
-    this.loadImage()
-    this.uid = (await this.getUserInfo())
-    const user = await auth()
-    this.photoUrl = user.photoURL
   }
 }
 </script>

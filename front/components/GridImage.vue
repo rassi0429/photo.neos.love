@@ -18,10 +18,6 @@ export default {
       required: true
     },
   },
-  mounted() {
-    window.addEventListener('resize', this.calcRows)
-    this.calcRows()
-  },
   data() {
     return {
       imagerow: [],
@@ -30,6 +26,10 @@ export default {
   },
   computed: {
     ...mapState("modal", ["isModalOpen", "modalData"])
+  },
+  mounted() {
+    window.addEventListener('resize', this.calcRows)
+    this.calcRows()
   },
   methods: {
     ...mapMutations('modal', ['openModal', "closeModal","setWidth"]),

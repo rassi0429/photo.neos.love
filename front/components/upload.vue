@@ -42,7 +42,173 @@
           img#loadIcon(src="/load.png")
           p#uploadingInfo uploading...  {{ uploadCount }} / {{ files.length }}
 </template>
+<script>
+import axios from "axios";
+import EXIF from "exif-js";
+import {mapActions, mapState, mapMutations} from "vuex";
+import auth from "@/plugins/auth";
+
+export default {
+  name: "UploadModal",
+  data() {
+    return {
+      isEnter: false,
+      files: [],
+      title: new Date().toLocaleDateString(),
+      tags: [],
+      uid: "",
+      tmpTag: "",
+      uploadCount: 0,
+      isUploading: false
+    }
+  },
+  computed: {
+    ...mapState(["endpoint"]),
+    ...mapState("upload", ["isUploadModal"]),
+  },
+  async mounted() {
+    this.uid = await this.getUserInfo()
+  },
+  methods: {
+    ...mapActions('auth', ['getUserInfo', "twitterLogin"]),
+    ...mapMutations('upload', ['closeModal']),
+    getComment(file) {
+      return new Promise((resolve) => {
+        EXIF.getData(file, function () {
+          const allMetaData = EXIF.getAllTags(this);
+          if (allMetaData.UserComment) {
+            const binary = allMetaData.UserComment.slice(8)
+            const result = []
+            for (let j = 0; j < binary.length; j += 2) {
+              result.push(binary[j] * 256 + binary[j + 1])
+            }
+            console.log(String.fromCharCode(...result))
+            resolve(JSON.parse(String.fromCharCode(...result)))
+          }
+          resolve(null)
+        });
+      })
+    },
+    dragEnter() {
+      this.isEnter = true;
+    },
+    dragLeave() {
+      this.isEnter = false;
+    },
+    async dropFile() {
+      const files = event.dataTransfer.files
+      const fileArray = Array.from(files)
+      for (const f of fileArray) {
+        const i = fileArray.indexOf(f);
+        const result = await this.getComment(f)
+        if (result) {
+          fileArray[i].comment = "taken at " + result.locationName
+          result.presentUserNameArray.forEach(k => {
+            console.log(k)
+            if (!this.tags.includes(k)) {
+              this.tags.push(k)
+            }
+          })
+        } else {
+          fileArray[i].comment = ""
+        }
+      }
+      this.files.push(...fileArray)
+      this.isEnter = false;
+    },
+    deleteFile(index) {
+      this.files.splice(index, 1)
+    },
+    changeComment({index, text}) {
+      console.log(text.target.value)
+      this.files[index].comment = text.target.value
+    },
+    getFileUrl(file) {
+      return URL.createObjectURL(file)
+    },
+    async submit() {
+      if (!this.files.length) return
+      const user = await auth()
+      const token = await user.getIdToken(true)
+      await axios.post(`${this.endpoint}/v1/user`, {}, {headers: {token}})
+      this.isUploading = true
+      Promise.all(this.files.map(f => this.uploadImage(f, token))).then(async (w) => {
+        const photos = w.map(res => res.data.id)
+        // this.$router.push("/")
+        const {data} = await axios.post(`${this.endpoint}/v1/moment`, {title: this.title, photos}, {headers: {token}})
+        this.closeModal()
+        this.uploadCount = 0
+        this.$router.push("/moment/" + data.id)
+      }).catch(() => {
+        alert("アップロードに失敗しました")
+      }).finally(() => {
+        this.files = []
+        this.tags = []
+        this.isUploading = false
+      })
+    },
+    uploadImage(file, token) {
+      return new Promise((resolve, reject) => {
+        try {
+          axios.get(`${this.endpoint}/v1/imageReq`, {headers: {token}}).then(data => {
+            const params = new FormData();
+            params.append('file', file);
+            axios.post(data.data.result.uploadURL, params, {headers: {"content-type": 'multipart/form-data'}}).then(t => {
+              axios.post(`${this.endpoint}/v1/photo`, {
+                  url: t.data.result.variants.filter(k => k.includes("public"))[0],
+                  comment: file.comment || this.title,
+                  tags: JSON.stringify(this.tags)
+                },
+                {
+                  headers: {
+                    token
+                  }
+                }
+              ).then(re => {
+                resolve(re)
+                this.uploadCount++
+              }).catch(reject)
+            }).catch(reject)
+          }).catch(reject)
+        } catch (e) {
+          reject(e)
+        }
+      })
+    },
+    async onFileChange(e) {
+      const files = e.target.files || e.dataTransfer.files;
+      const fileArray = Array.from(files)
+      for (const f of fileArray) {
+        const i = fileArray.indexOf(f);
+        const result = await this.getComment(f)
+        if (result) {
+          fileArray[i].comment = "taken at " + result.locationName
+          result.presentUserNameArray.forEach(k => {
+            console.log(k)
+            if (!this.tags.includes(k)) {
+              this.tags.push(k)
+            }
+          })
+        } else {
+          fileArray[i].comment = ""
+        }
+      }
+      this.files.push(...fileArray)
+    },
+    addTag() {
+      if (this.tmpTag.trim() && !this.tags.includes(this.tmpTag)) {
+        this.tags.push(this.tmpTag)
+      }
+    },
+    deleteTag(index) {
+      this.tags.splice(index, 1)
+    }
+  }
+}
+</script>
+
 <style scoped>
+
 .upload-img {
   max-height: 85%;
   overflow-y: scroll;
@@ -300,167 +466,3 @@ p {
 }
 
 </style>
-<script>
-import axios from "axios";
-import EXIF from "exif-js";
-import {mapActions, mapState, mapMutations} from "vuex";
-import auth from "@/plugins/auth";
-
-export default {
-  name: "UploadModal",
-  data() {
-    return {
-      isEnter: false,
-      files: [],
-      title: new Date().toLocaleDateString(),
-      tags: [],
-      uid: "",
-      tmpTag: "",
-      uploadCount: 0,
-      isUploading: false
-    }
-  },
-  computed: {
-    ...mapState(["endpoint"]),
-    ...mapState("upload", ["isUploadModal"]),
-  },
-  async mounted() {
-    this.uid = await this.getUserInfo()
-  },
-  methods: {
-    ...mapActions('auth', ['getUserInfo', "twitterLogin"]),
-    ...mapMutations('upload', ['closeModal']),
-    getComment(file) {
-      return new Promise((resolve) => {
-        EXIF.getData(file, function () {
-          const allMetaData = EXIF.getAllTags(this);
-          if (allMetaData.UserComment) {
-            const binary = allMetaData.UserComment.slice(8)
-            const result = []
-            for (let j = 0; j < binary.length; j += 2) {
-              result.push(binary[j] * 256 + binary[j + 1])
-            }
-            console.log(String.fromCharCode(...result))
-            resolve(JSON.parse(String.fromCharCode(...result)))
-          }
-          resolve(null)
-        });
-      })
-    },
-    dragEnter() {
-      this.isEnter = true;
-    },
-    dragLeave() {
-      this.isEnter = false;
-    },
-    async dropFile() {
-      const files = event.dataTransfer.files
-      const fileArray = Array.from(files)
-      for (const f of fileArray) {
-        const i = fileArray.indexOf(f);
-        const result = await this.getComment(f)
-        if (result) {
-          fileArray[i].comment = "taken at " + result.locationName
-          result.presentUserNameArray.forEach(k => {
-            console.log(k)
-            if (!this.tags.includes(k)) {
-              this.tags.push(k)
-            }
-          })
-        } else {
-          fileArray[i].comment = ""
-        }
-      }
-      this.files.push(...fileArray)
-      this.isEnter = false;
-    },
-    deleteFile(index) {
-      this.files.splice(index, 1)
-    },
-    changeComment({index, text}) {
-      console.log(text.target.value)
-      this.files[index].comment = text.target.value
-    },
-    getFileUrl(file) {
-      return URL.createObjectURL(file)
-    },
-    async submit() {
-      if (!this.files.length) return
-      const user = await auth()
-      const token = await user.getIdToken(true)
-      await axios.post(`${this.endpoint}/v1/user`, {}, {headers: {token}})
-      this.isUploading = true
-      Promise.all(this.files.map(f => this.uploadImage(f, token))).then(async (w) => {
-        const photos = w.map(res => res.data.id)
-        // this.$router.push("/")
-        const {data} = await axios.post(`${this.endpoint}/v1/moment`, {title: this.title, photos}, {headers: {token}})
-        this.closeModal()
-        this.uploadCount = 0
-        this.$router.push("/moment/" + data.id)
-      }).catch(() => {
-        alert("アップロードに失敗しました")
-      }).finally(() => {
-        this.files = []
-        this.tags = []
-        this.isUploading = false
-      })
-    },
-    uploadImage(file, token) {
-      return new Promise((resolve, reject) => {
-        try {
-          axios.get(`${this.endpoint}/v1/imageReq`, {headers: {token}}).then(data => {
-            const params = new FormData();
-            params.append('file', file);
-            axios.post(data.data.result.uploadURL, params, {headers: {"content-type": 'multipart/form-data'}}).then(t => {
-              axios.post(`${this.endpoint}/v1/photo`, {
-                  url: t.data.result.variants.filter(k => k.includes("public"))[0],
-                  comment: file.comment || this.title,
-                  tags: JSON.stringify(this.tags)
-                },
-                {
-                  headers: {
-                    token
-                  }
-                }
-              ).then(re => {
-                resolve(re)
-                this.uploadCount++
-              }).catch(reject)
-            }).catch(reject)
-          }).catch(reject)
-        } catch (e) {
-          reject(e)
-        }
-      })
-    },
-    async onFileChange(e) {
-      const files = e.target.files || e.dataTransfer.files;
-      const fileArray = Array.from(files)
-      for (const f of fileArray) {
-        const i = fileArray.indexOf(f);
-        const result = await this.getComment(f)
-        if (result) {
-          fileArray[i].comment = "taken at " + result.locationName
-          result.presentUserNameArray.forEach(k => {
-            console.log(k)
-            if (!this.tags.includes(k)) {
-              this.tags.push(k)
-            }
-          })
-        } else {
-          fileArray[i].comment = ""
-        }
-      }
-      this.files.push(...fileArray)
-    },
-    addTag() {
-      if (this.tmpTag.trim() && !this.tags.includes(this.tmpTag)) {
-        this.tags.push(this.tmpTag)
-      }
-    },
-    deleteTag(index) {
-      this.tags.splice(index, 1)
-    }
-  }
-}
-</script>
