@@ -20,6 +20,8 @@ const { cloudflare } = require('../credentials/secrets.json');
 import { Headers } from '@nestjs/common';
 import { ToBoolean } from './toboolean';
 import { NeosbotService } from './neosbot/neosbot.service';
+import { Transform } from 'class-transformer';
+import { IsInt, IsNumber, IsOptional, IsString, Max } from 'class-validator';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const j2e = require('json2emap');
 
@@ -51,6 +53,24 @@ class CreateMomentDTO {
 class emapDTO {
   @ToBoolean()
   emap?: boolean;
+}
+
+class tagQueryDTO {
+  @ToBoolean()
+  emap?: boolean;
+  @Transform((value) => {
+    return Number(value.value) || 0;
+  })
+  @IsOptional()
+  limit?: number;
+  @Transform((value) => {
+    return Number(value.value) || 0;
+  })
+  @IsOptional()
+  page?: number;
+  @IsString()
+  @IsOptional()
+  order?: string;
 }
 
 @Controller()
@@ -144,8 +164,13 @@ export class AppController {
   }
 
   @Get('v1/tag/:id')
-  async getPhotoByTag(@Param('id') id: string, @Query() query: emapDTO) {
-    const data = await this.appService.getPhotoByTag(id);
+  async getPhotoByTag(@Param('id') id: string, @Query() query: tagQueryDTO) {
+    const data = await this.appService.getPhotoByTag(
+      id,
+      query.order || 'DESC',
+      query.limit,
+      query.page,
+    );
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
 

@@ -226,11 +226,18 @@ export class AppService {
     });
   }
 
-  async getPhotoByTag(tag: string) {
-    return this.tagRepository.findOne({
+  async getPhotoByTag(tag: string, order?: string, limit = 0, page = 0) {
+    const result = await this.tagRepository.findOne({
       where: { name: tag },
       relations: [`photos`, `photos.tags`],
     });
+    if (order !== 'ASC') {
+      result.photos = result.photos.reverse();
+    }
+    if (limit || page) {
+      result.photos = result.photos.slice(page * limit, (page + 1) * limit);
+    }
+    return result;
   }
 
   async updatePhotoById(id, comment, tags) {
