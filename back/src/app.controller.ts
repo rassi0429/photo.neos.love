@@ -20,6 +20,8 @@ const { cloudflare } = require('../credentials/secrets.json');
 import { Headers } from '@nestjs/common';
 import { ToBoolean } from './toboolean';
 import { NeosbotService } from './neosbot/neosbot.service';
+import { Transform } from 'class-transformer';
+import { IsInt, IsNumber, IsOptional, IsString, Max } from 'class-validator';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const j2e = require('json2emap');
 
@@ -56,8 +58,18 @@ class emapDTO {
 class tagQueryDTO {
   @ToBoolean()
   emap?: boolean;
+  @Transform((value) => {
+    return Number(value.value) || 0;
+  })
+  @IsOptional()
   limit?: number;
+  @Transform((value) => {
+    return Number(value.value) || 0;
+  })
+  @IsOptional()
   page?: number;
+  @IsString()
+  @IsOptional()
   order?: string;
 }
 
