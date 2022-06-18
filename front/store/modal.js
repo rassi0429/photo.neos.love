@@ -42,6 +42,7 @@ export const actions = {
       if(user) {
         const token = await user.getIdToken(true)
         await axios.delete(`${rootState.endpoint}/v1/photo/${state.modalData.id}`, {headers: {token}})
+        await this.$router.replace({'query': null});
         location.reload()
       }
     }
