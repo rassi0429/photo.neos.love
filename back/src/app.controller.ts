@@ -174,6 +174,12 @@ export class AppController {
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
 
+  @Get('v1/tags')
+  async getTags(@Query() query: emapDTO) {
+    const data = await this.appService.getTags();
+    return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
+  }
+
   @Post('v1/user')
   @UseGuards(AccountGuard)
   async updateUserInfo(@Headers('token') token: string) {

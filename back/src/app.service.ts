@@ -240,6 +240,11 @@ export class AppService {
     return result;
   }
 
+  async getTags() {
+    const result = await this.tagRepository.find();
+    return result;
+  }
+
   async updatePhotoById(id, comment, tags) {
     const photo = await this.photoRepository.findOne({ where: { id } });
     const newTags = [];
