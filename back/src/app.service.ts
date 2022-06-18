@@ -226,11 +226,27 @@ export class AppService {
     });
   }
 
-  async getPhotoByTag(tag: string) {
-    return this.tagRepository.findOne({
-      where: { name: tag },
-      relations: [`photos`, `photos.tags`],
+  async getPhotoByTag(tag: string, order?: string, limit = 0, page = 0) {
+    const result = await this.tagRepository.findOne({ where: { name: tag } });
+    console.log(result);
+    const photos = await this.photoRepository.find({
+      where: {
+        tags: In([result]),
+      },
     });
+    console.log(photos);
+
+    // const result = await this.tagRepository.findOne({
+    //   where: { name: tag },
+    //   // order: {
+    //   //   photos: order === 'ASC' ? 'ASC' : 'DESC',
+    //   // },
+    //   relations: [`photos`, `photos.tags`],
+    // });
+    // if (limit || page) {
+    //   result.photos = result.photos.slice(page * limit, page * limit + limit);
+    // }
+    return result;
   }
 
   async updatePhotoById(id, comment, tags) {

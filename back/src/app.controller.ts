@@ -53,6 +53,14 @@ class emapDTO {
   emap?: boolean;
 }
 
+class tagQueryDTO {
+  @ToBoolean()
+  emap?: boolean;
+  limit?: number;
+  page?: number;
+  order?: string;
+}
+
 @Controller()
 export class AppController {
   constructor(
@@ -144,8 +152,13 @@ export class AppController {
   }
 
   @Get('v1/tag/:id')
-  async getPhotoByTag(@Param('id') id: string, @Query() query: emapDTO) {
-    const data = await this.appService.getPhotoByTag(id);
+  async getPhotoByTag(@Param('id') id: string, @Query() query: tagQueryDTO) {
+    const data = await this.appService.getPhotoByTag(
+      id,
+      query.order || 'DESC',
+      query.limit,
+      query.page,
+    );
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
 
