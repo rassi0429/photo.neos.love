@@ -5,7 +5,7 @@
 </h1>
 
 ## 問題を発見しましたか？
-あなたは issueを発行することができます。
+あなたは[issue](https://github.com/rassi0429/photo.neos.love/issues)を発行することができます。
 
 ## 開発に貢献したいですか？
 [dev doc](./developer-doc.md)
