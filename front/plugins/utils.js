@@ -1,8 +1,16 @@
 const defaultTwitterShareTitle = 'NeosVR Photo';
 
-const getIsDefaultTitle = (title) => {
-  const regex = /^\d{4}\/\d{1,2}\/\d{1,2}$/;
-  return RegExp(regex).test(title);
+const isOverTextWidth = (text, maxWidth = 500) => {
+  if (!text || maxWidth <= 0) return false;
+  try {
+    const ctx = document.createElement('canvas').getContext('2d');
+    ctx.font = '20px "Segoe UI", Meiryo, system-ui';
+    const { width } = ctx.measureText(text);
+    return width >= maxWidth;
+  } catch {
+    // empty
+  }
+  return true;
 }
 
 const openTwitterShare = (params) => {
@@ -12,27 +20,26 @@ const openTwitterShare = (params) => {
     return;
   }
   let shareTitle, shareLink;
-  const isDefaultTitle = getIsDefaultTitle(title);
   switch(type) {
     case 'modal':
-      shareTitle = isDefaultTitle ?
-        `${title} Uploaded by ${name}`
-        : title || `Uploaded by ${name}`;
+      shareTitle = isOverTextWidth(title+name) ?
+        title || `Uploaded by ${name}`
+        :`${title} Uploaded by ${name}`;
       shareLink = pageUrl || `https://photo.neos.love/?modal=${id}`;
       break;
     case 'moment':
     default:
       shareTitle = title ?
-        `${name}'s Moment - ${title}`
+        `${title} ${name}'s Moment`
         : `${name}'s Moment`;
       shareLink = pageUrl || `https://photo.neos.love/moment/${id}`;
   }
   if (!title && !name) {
     shareTitle = defaultTwitterShareTitle;
   }
-  const url = 'https://twitter.com/share'
-            + `?text=${encodeURI(shareTitle+'\n')}`
-            + `&url=${shareLink}`
+  const url = 'https://twitter.com/intent/tweet'
+            + `?text=${encodeURIComponent(shareTitle)}`
+            + `&url=${encodeURI(shareLink)}`
             + '&hashtags=NeosFrames';
   try {
     window.open(url, '_blank');
