@@ -6,7 +6,7 @@
     img#GridGradation(src="/top_gradation.png")
     div#content
       div.user-header.is-flex
-        p#MomentTitle Tag : {{ $route.params.id }}
+        p#MomentTitle \#{{ $route.params.id }}
       div#imageGrid
         grid-image(:images="images")
 </template>
@@ -135,7 +135,8 @@ export default {
 
 #MomentTitle {
   white-space: nowrap;
-  opacity: 0.5;;
+  color: #fff;
+  opacity: 0.5;
   margin-left: 0.3em;
   font-family: 'Noto Sans JP', sans-serif;
   font-size: min(25px, max(3vw, 10px));
