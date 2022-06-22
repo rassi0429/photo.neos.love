@@ -11,7 +11,7 @@
           img.ImageInModal.mh100.w100.of(v-if="loading" :src="modalData.url.replace(`public`,`thumbnail`)")
         div.column.is-3#InfoField(:class="{'h30': width < 768}")
           div.userField
-            p#comment(v-if="!isEditing") {{ modalData.comment }}
+            p#comment(v-if="!isEditing") {{ modalData.comment.replace(/(<([^>]+)>)/gi, '') }}
               div(v-if="isEditing")
                 textarea.w100.is-flex-grow-1#commentField(:value="modalData.comment" @change="(e) => updateComment(e.target.value)")
                 div#TagBtnField
