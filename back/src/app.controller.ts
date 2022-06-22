@@ -182,14 +182,14 @@ export class AppController {
 
   @Post('v1/user')
   @UseGuards(AccountGuard)
-  async updateUserInfo(@Headers('token') token: string) {
+  async updateUserInfo(@Headers('token') token: string, @Body() body) {
     console.log('user data update');
     const user = await admin.auth().verifyIdToken(token);
     return await this.appService.updateUserInfo(
       user.user_id,
       user.firebase.identities['twitter.com'][0],
-      user.name,
-      user.picture,
+      body.displayName,
+      body.photoURL,
     );
   }
 
