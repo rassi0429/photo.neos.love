@@ -18,7 +18,7 @@ export const actions = {
     if (user) {
       console.log('ログイン済み')
       const token = await user.getIdToken(true)
-      await axios.post(`${rootState.endpoint}/v1/user/`,{},{headers: {token}})
+      await axios.post(`${rootState.endpoint}/v1/user/`,{photoURL: user.providerData[0].photoURL, displayName: user.providerData[0].displayName},{headers: {token}})
       commit('setUid', user.uid)
       return user.uid
     } else {

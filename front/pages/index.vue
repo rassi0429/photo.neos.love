@@ -77,7 +77,7 @@ export default {
   async mounted() {
     this.uid = (await this.getUserInfo())
     const user = await auth()
-    this.photoUrl = user.photoURL
+    this.photoUrl = user.providerData[0].photoURL
     await this.getImage()
     window.addEventListener('scroll', this.handleScroll);
   },
