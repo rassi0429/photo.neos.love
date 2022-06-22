@@ -1,4 +1,16 @@
+const baseUrl = 'https://photo.neos.love';
 const defaultTwitterShareTitle = 'NeosVR Photo';
+
+const fixedEncodeURIComponent = (str) => {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+}
+
+const formatHashtag = (text) => {
+  if (!isNaN(text)) return '';
+  return text.replaceAll(/[! -/:-@[-`{-~]/g, '_');
+}
 
 const isOverTextWidth = (text, maxWidth = 500) => {
   if (!text || maxWidth <= 0) return false;
@@ -15,24 +27,27 @@ const isOverTextWidth = (text, maxWidth = 500) => {
 
 const openTwitterShare = (params) => {
   const { type, id, pageUrl, title, name } = params;
-  if (!type || !id) {
-    console.error('openTwitterShare() - Argument is required: type, id');
+  if (!type || !id || (type==='tag' && !name)) {
+    console.error('openTwitterShare() - Argument Error');
     return;
   }
   let shareTitle, shareLink;
+  let shareTag = '';
   switch(type) {
     case 'modal':
       shareTitle = isOverTextWidth(title+name) ?
-        title || `Uploaded by ${name}`
-        :`${title} Uploaded by ${name}`;
-      shareLink = pageUrl || `https://photo.neos.love/?modal=${id}`;
+        title || `Uploaded by ${name}` : `${title} Uploaded by ${name}`;
+      shareLink = pageUrl || `${baseUrl}/?modal=${id}`;
       break;
     case 'moment':
-    default:
-      shareTitle = title ?
-        `${title} ${name}'s Moment`
-        : `${name}'s Moment`;
-      shareLink = pageUrl || `https://photo.neos.love/moment/${id}`;
+      shareTitle = title ? `${title} ${name}'s Moment` : `${name}'s Moment`;
+      shareLink = pageUrl || `${baseUrl}/moment/${id}`;
+      break;
+    case 'tag':
+      default:
+        shareTitle = `Tag: ${name}`;
+        shareLink = `${baseUrl}/tag/${fixedEncodeURIComponent(name)}`;
+        shareTag = `,${formatHashtag(name)}`;
   }
   if (!title && !name) {
     shareTitle = defaultTwitterShareTitle;
@@ -40,7 +55,7 @@ const openTwitterShare = (params) => {
   const url = 'https://twitter.com/intent/tweet'
             + `?text=${encodeURIComponent(shareTitle)}`
             + `&url=${encodeURI(shareLink)}`
-            + '&hashtags=NeosFrames';
+            + `&hashtags=NeosFrames${encodeURIComponent(shareTag)}`;
   try {
     window.open(url, '_blank');
   } catch (e) {

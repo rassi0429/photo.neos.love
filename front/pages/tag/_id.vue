@@ -7,6 +7,7 @@
     div#content
       div.user-header.is-flex
         p#MomentTitle \#{{ $route.params.id }}
+        img#twShareBtn(src="/tw.png", alt="share" @click="shareTwitter()")
       div#imageGrid
         grid-image(:images="images")
 </template>
@@ -104,6 +105,13 @@ export default {
     async loadImage() {
       const {data} = await axios.get(`${this.endpoint}/v1/tag/${this.$route.params.id}`)
       this.images = data.photos
+    },
+    shareTwitter() {
+      this.$openTwitterShare({
+        type: 'tag',
+        id: this.preData?.id,
+        name: this.preData?.name
+      });
     }
   }
 }
@@ -177,6 +185,18 @@ export default {
 
 #loginBtn:hover {
   opacity: 0.9
+}
+
+#twShareBtn {
+  position: absolute;
+  right: 0;
+  top: 0.8em;
+  height: 1.5em;
+  opacity: 0.2;;
+}
+
+#twShareBtn:hover {
+  opacity: 0.5;;
 }
 
 </style>
