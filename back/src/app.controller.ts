@@ -171,6 +171,7 @@ export class AppController {
       query.limit,
       query.page,
     );
+    if (!data) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
 
@@ -196,6 +197,7 @@ export class AppController {
   @Get('v1/user/:id')
   async getUserInfo(@Param('id') userId: string, @Query() query: emapDTO) {
     const user = await this.appService.getUserInfo(userId);
+    if (!user) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
     const countInfo = await this.appService.getCountInfo(userId);
     const data = { user, countInfo };
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
@@ -240,6 +242,7 @@ export class AppController {
   @Get('/v1/moment/:id')
   async getMoment(@Param('id') momentId: number, @Query() query: emapDTO) {
     const data = await this.appService.getMomentById(momentId);
+    if (!data) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
 }
