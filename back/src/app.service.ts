@@ -231,6 +231,7 @@ export class AppService {
       where: { name: tag },
       relations: [`photos`, `photos.tags`],
     });
+    if (!result) return null;
     if (order !== 'ASC') {
       result.photos = result.photos.reverse();
     }
