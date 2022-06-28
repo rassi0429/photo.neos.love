@@ -22,10 +22,12 @@ export default {
   components: {PhotoViewModal, UploadModal},
   layout: "normal",
   async asyncData({params, query}) {
-    if (query.modal) {
-      const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
-      return {prePhotoData: photo.data}
-    }
+    try {
+      if (query.modal) {
+        const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
+        return {prePhotoData: photo.data}
+      }
+    } catch {}
   },
   data() {
     return {
