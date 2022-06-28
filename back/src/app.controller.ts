@@ -32,6 +32,8 @@ class PhotosDTO {
   uid?: string;
   @ToBoolean()
   emap?: boolean;
+  @ToBoolean()
+  nfsw?: boolean;
 }
 
 class CreatePhotosDTO {
@@ -53,6 +55,8 @@ class CreateMomentDTO {
 class emapDTO {
   @ToBoolean()
   emap?: boolean;
+  @ToBoolean()
+  nfsw?: boolean;
 }
 
 class tagQueryDTO {
@@ -71,6 +75,8 @@ class tagQueryDTO {
   @IsString()
   @IsOptional()
   order?: string;
+  @ToBoolean()
+  nfsw?: boolean;
 }
 
 @Controller()
@@ -98,6 +104,7 @@ export class AppController {
       photosDTO.page || 0,
       photosDTO.tags || [],
       photosDTO.uid || null,
+      photosDTO.nfsw || false,
     );
     return photosDTO.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
@@ -123,7 +130,7 @@ export class AppController {
       throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       return;
     }
-    const photo = await this.appService.getPhotoById(id);
+    const photo = await this.appService.getPhotoById(id, query.nfsw);
     if (!photo) {
       throw new HttpException('not found', HttpStatus.NOT_FOUND);
       return;
@@ -139,7 +146,7 @@ export class AppController {
     @Body() updatePhoto: UpdatePhotoDTO,
   ) {
     const { uid } = await admin.auth().verifyIdToken(token);
-    const photo = await this.appService.getPhotoById(id);
+    const photo = await this.appService.getPhotoById(id, true);
     if (photo.author !== uid) {
       throw new HttpException('forbidden', HttpStatus.FORBIDDEN);
       return;
@@ -155,7 +162,7 @@ export class AppController {
   @UseGuards(AccountGuard)
   async deletePhoto(@Param('id') id: number, @Headers('token') token: string) {
     const { uid } = await admin.auth().verifyIdToken(token);
-    const photo = await this.appService.getPhotoById(id);
+    const photo = await this.appService.getPhotoById(id, true);
     if (photo.author !== uid) {
       throw new HttpException('forbidden', HttpStatus.FORBIDDEN);
       return;
@@ -170,6 +177,7 @@ export class AppController {
       query.order || 'DESC',
       query.limit,
       query.page,
+      query.nfsw,
     );
     if (!data) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
@@ -197,6 +205,7 @@ export class AppController {
   @Get('v1/user/:id')
   async getUserInfo(@Param('id') userId: string, @Query() query: emapDTO) {
     const user = await this.appService.getUserInfo(userId);
+    console.log(user);
     if (!user) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
     const countInfo = await this.appService.getCountInfo(userId);
     const data = { user, countInfo };
@@ -205,13 +214,13 @@ export class AppController {
 
   @Get('v1/user/:id/moments')
   async getUserMomentData(@Param('id') userid, @Query() query: emapDTO) {
-    const data = await this.appService.getMomentByUserId(userid);
+    const data = await this.appService.getMomentByUserId(userid, query.nfsw);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
 
   @Get('v1/user/:id/photos')
   async getUserPhotoData(@Param('id') userid, @Query() query: emapDTO) {
-    const data = this.appService.getPhotoByUserId(userid);
+    const data = this.appService.getPhotoByUserId(userid, query.nfsw);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
 
@@ -241,7 +250,7 @@ export class AppController {
 
   @Get('/v1/moment/:id')
   async getMoment(@Param('id') momentId: number, @Query() query: emapDTO) {
-    const data = await this.appService.getMomentById(momentId);
+    const data = await this.appService.getMomentById(momentId, query.nfsw);
     if (!data) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
