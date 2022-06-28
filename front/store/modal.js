@@ -62,13 +62,16 @@ export const mutations = {
       const useraction = window.confirm("エッチな画像が含まれます。あなたは18歳以上ですか？")
       if (!useraction) {
         window.location = "https://kids.yahoo.co.jp/"
+      } else {
+        state.isModalOpen = true
+        state.modalData = data
+        this.$router.replace({'query': {modal: data.id}});
       }
     } else {
       state.isModalOpen = true
       state.modalData = data
       this.$router.replace({'query': {modal: data.id}});
     }
-
   },
 
   closeModal(state) {
