@@ -25,12 +25,14 @@ export default {
   components: {UploadModal, PhotoViewModal},
   layout: "normal",
   async asyncData({params,query}) {
-    const {data} = await axios.get("https://photo-api.neos.love/v1/tag/" + encodeURIComponent(params.id))
-    if (query.modal) {
-      const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
-      return {preData: data, prePhotoData: photo.data}
-    }
-    return {preData: data}
+    try {
+      const {data} = await axios.get("https://photo-api.neos.love/v1/tag/" + encodeURIComponent(params.id))
+      if (query.modal) {
+        const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
+        return {preData: data, prePhotoData: photo.data}
+      }
+      return {preData: data}
+    } catch {}
   },
   data() {
     return {
