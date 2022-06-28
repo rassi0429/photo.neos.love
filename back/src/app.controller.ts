@@ -33,7 +33,7 @@ class PhotosDTO {
   @ToBoolean()
   emap?: boolean;
   @ToBoolean()
-  nfsw?: boolean;
+  nsfw?: boolean;
 }
 
 class CreatePhotosDTO {
@@ -56,7 +56,7 @@ class emapDTO {
   @ToBoolean()
   emap?: boolean;
   @ToBoolean()
-  nfsw?: boolean;
+  nsfw?: boolean;
 }
 
 class tagQueryDTO {
@@ -76,7 +76,7 @@ class tagQueryDTO {
   @IsOptional()
   order?: string;
   @ToBoolean()
-  nfsw?: boolean;
+  nsfw?: boolean;
 }
 
 @Controller()
@@ -104,7 +104,7 @@ export class AppController {
       photosDTO.page || 0,
       photosDTO.tags || [],
       photosDTO.uid || null,
-      photosDTO.nfsw || false,
+      photosDTO.nsfw || false,
     );
     return photosDTO.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
@@ -130,7 +130,7 @@ export class AppController {
       throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       return;
     }
-    const photo = await this.appService.getPhotoById(id, query.nfsw);
+    const photo = await this.appService.getPhotoById(id, query.nsfw);
     if (!photo) {
       throw new HttpException('not found', HttpStatus.NOT_FOUND);
       return;
@@ -177,7 +177,7 @@ export class AppController {
       query.order || 'DESC',
       query.limit,
       query.page,
-      query.nfsw,
+      query.nsfw,
     );
     if (!data) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
@@ -214,13 +214,13 @@ export class AppController {
 
   @Get('v1/user/:id/moments')
   async getUserMomentData(@Param('id') userid, @Query() query: emapDTO) {
-    const data = await this.appService.getMomentByUserId(userid, query.nfsw);
+    const data = await this.appService.getMomentByUserId(userid, query.nsfw);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
 
   @Get('v1/user/:id/photos')
   async getUserPhotoData(@Param('id') userid, @Query() query: emapDTO) {
-    const data = this.appService.getPhotoByUserId(userid, query.nfsw);
+    const data = this.appService.getPhotoByUserId(userid, query.nsfw);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }
 
@@ -250,7 +250,7 @@ export class AppController {
 
   @Get('/v1/moment/:id')
   async getMoment(@Param('id') momentId: number, @Query() query: emapDTO) {
-    const data = await this.appService.getMomentById(momentId, query.nfsw);
+    const data = await this.appService.getMomentById(momentId, query.nsfw);
     if (!data) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
     return query.emap ? j2e(JSON.parse(JSON.stringify(data))) : data;
   }

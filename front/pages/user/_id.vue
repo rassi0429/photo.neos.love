@@ -117,11 +117,11 @@ export default {
     ...mapActions('auth', ['getUserInfo', "twitterLogin", "LogOut"]),
     ...mapMutations('upload', ['openModal', "closeModal"]),
     async getUserPhoto() {
-      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/photos?nfsw=${this.$route.query.nfsw || false}`)
+      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/photos?nsfw=${this.$route.query.nsfw || false}`)
       return data
     },
     async getUserMoment() {
-      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/moments?nfsw=${this.$route.query.nfsw || false}`)
+      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/moments?nsfw=${this.$route.query.nsfw || false}`)
       return data
     },
     async getUserTwitterInfo() {

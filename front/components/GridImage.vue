@@ -34,10 +34,10 @@ export default {
   methods: {
     ...mapMutations('modal', ['openModal', "closeModal","setWidth"]),
     getlink(image) {
-      const nfswTags = ['nfsw', 'r18'];
+      const nsfwTags = ['nsfw', 'r18'];
       const name = image.tags.map(t => t.name)
-      if(name.includes(nfswTags[0]) || name.includes(nfswTags[1])) {
-        return image.url.replace('public','nfsw')
+      if(name.includes(nsfwTags[0]) || name.includes(nsfwTags[1])) {
+        return image.url.replace('public','nsfw')
       } else {
         return image.url.replace('public','thumbnail')
       }

@@ -56,9 +56,9 @@ export const mutations = {
   openModal(state, data) {
     if (state.isModalOpen) return
 
-    const nfswTags = ['nfsw', 'r18'];
+    const nsfwTags = ['nsfw', 'r18'];
     const name = data.tags.map(t => t.name)
-    if (name.includes(nfswTags[0]) || name.includes(nfswTags[1])) {
+    if (name.includes(nsfwTags[0]) || name.includes(nsfwTags[1])) {
       const useraction = window.confirm("エッチな画像が含まれます。あなたは18歳以上ですか？")
       if (!useraction) {
         window.location = "https://kids.yahoo.co.jp/"

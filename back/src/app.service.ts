@@ -25,7 +25,7 @@ export class AppService {
     private userInfoRepository: Repository<UserInfo>,
   ) {}
 
-  async getMomentByUserId(uid: string, nfsw: boolean) {
+  async getMomentByUserId(uid: string, nsfw: boolean) {
     console.log('getMomentByUserId', uid);
     const data = await this.momentRepository.find({
       where: { author: uid },
@@ -34,9 +34,9 @@ export class AppService {
         id: 'DESC',
       },
     });
-    if (!nfsw) {
+    if (!nsfw) {
       const newdata = data.map((d) => {
-        d.photos = this.excludeNFSW(d.photos);
+        d.photos = this.excludensfw(d.photos);
         return d;
       });
       console.log(newdata);
@@ -45,7 +45,7 @@ export class AppService {
     return data;
   }
 
-  async getPhotoByUserId(uid: string, nfsw: boolean) {
+  async getPhotoByUserId(uid: string, nsfw: boolean) {
     console.log('getPhotoByUserId', uid);
     const photos = await this.photoRepository.find({
       where: { author: uid },
@@ -54,23 +54,23 @@ export class AppService {
         id: 'DESC',
       },
     });
-    if (!nfsw) {
-      return this.excludeNFSW(photos);
+    if (!nsfw) {
+      return this.excludensfw(photos);
     }
     return photos;
   }
 
-  async getPhotoById(id: number, nfsw: boolean) {
+  async getPhotoById(id: number, nsfw: boolean) {
     const photo = await this.photoRepository.findOne({
       where: {
         id,
       },
       relations: ['tags'],
     });
-    if (nfsw) {
+    if (nsfw) {
       return photo;
     } else {
-      return this.excludeNFSW([photo])[0];
+      return this.excludensfw([photo])[0];
     }
   }
 
@@ -117,10 +117,10 @@ export class AppService {
         let len = tag.photos.length >= 4 ? 4 : tag.photos.length;
         const imgs = [];
         for (let i = 0; i < len; i++) {
-          const nfswTags = ['nfsw', 'r18'];
+          const nsfwTags = ['nsfw', 'r18'];
           const tags = tag.photos[i].tags.map((t) => t.name);
-          const nfsw = tags.includes(nfswTags[0]) || tags.includes(nfswTags[1]);
-          if (nfsw) continue;
+          const nsfw = tags.includes(nsfwTags[0]) || tags.includes(nsfwTags[1]);
+          if (nsfw) continue;
           imgs.push(
             await loadImage(tag.photos[i].url.replace('public', 'ogp')),
           );
@@ -196,10 +196,10 @@ export class AppService {
       let len = moment.photos.length >= 4 ? 4 : moment.photos.length;
       const imgs = [];
       for (let i = 0; i < len; i++) {
-        const nfswTags = ['nfsw', 'r18'];
+        const nsfwTags = ['nsfw', 'r18'];
         const tags = moment.photos[i].tags.map((t) => t.name);
-        const nfsw = tags.includes(nfswTags[0]) || tags.includes(nfswTags[1]);
-        if (nfsw) continue;
+        const nsfw = tags.includes(nsfwTags[0]) || tags.includes(nsfwTags[1]);
+        if (nsfw) continue;
         imgs.push(
           await loadImage(moment.photos[i].url.replace('public', 'ogp')),
         );
@@ -247,13 +247,13 @@ export class AppService {
     }
   }
 
-  async getMomentById(momentId: number, nfsw: boolean) {
+  async getMomentById(momentId: number, nsfw: boolean) {
     const data = await this.momentRepository.findOne({
       where: { id: momentId },
       relations: ['photos', 'photos.tags'],
     });
-    if (!nfsw) {
-      data.photos = this.excludeNFSW(data.photos);
+    if (!nsfw) {
+      data.photos = this.excludensfw(data.photos);
     }
     return data;
   }
@@ -263,7 +263,7 @@ export class AppService {
     order?: string,
     limit = 0,
     page = 0,
-    nfsw = false,
+    nsfw = false,
   ) {
     const result = await this.tagRepository.findOne({
       where: { name: tag },
@@ -276,10 +276,10 @@ export class AppService {
     if (limit || page) {
       result.photos = result.photos.slice(page * limit, (page + 1) * limit);
     }
-    if (nfsw) {
+    if (nsfw) {
       return result;
     } else {
-      result.photos = this.excludeNFSW(result.photos);
+      result.photos = this.excludensfw(result.photos);
       return result;
     }
   }
@@ -313,7 +313,7 @@ export class AppService {
     page: number,
     tags: string[],
     user: string,
-    nfsw: boolean,
+    nsfw: boolean,
   ) {
     let photos: Photo[] = [];
     if (tags.length !== 0) {
@@ -350,17 +350,17 @@ export class AppService {
         },
       });
     }
-    if (!nfsw) {
-      photos = this.excludeNFSW(photos);
+    if (!nsfw) {
+      photos = this.excludensfw(photos);
     }
     return photos;
   }
 
-  excludeNFSW(photos: Photo[]) {
-    const nfswTags = ['nfsw', 'r18'];
+  excludensfw(photos: Photo[]) {
+    const nsfwTags = ['nsfw', 'r18'];
     return photos.filter((p) => {
       const tags = p.tags.map((t) => t.name.toLowerCase());
-      if (tags.includes(nfswTags[0]) || tags.includes(nfswTags[1])) {
+      if (tags.includes(nsfwTags[0]) || tags.includes(nsfwTags[1])) {
         return false;
       } else {
         return true;

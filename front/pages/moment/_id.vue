@@ -102,7 +102,7 @@ export default {
     ...mapActions(`auth`, ["getUserInfo"]),
     ...mapMutations("upload", ["openModal"]),
     async getMomentData() {
-      const {data} = await axios.get(`${this.endpoint}/v1/moment/${this.$route.params.id}?nfsw=${this.$route.query.nfsw || false}`)
+      const {data} = await axios.get(`${this.endpoint}/v1/moment/${this.$route.params.id}?nsfw=${this.$route.query.nsfw || false}`)
       return data
     },
     formatDate(date) {
