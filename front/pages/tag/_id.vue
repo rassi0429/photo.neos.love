@@ -103,7 +103,7 @@ export default {
     ...mapMutations(`upload`, ["openModal"]),
     ...mapActions(`auth`, ["getUserInfo"]),
     async loadImage() {
-      const {data} = await axios.get(`${this.endpoint}/v1/tag/${this.$route.params.id}&nfsw=${this.$route.query.nfsw || false}`)
+      const {data} = await axios.get(`${this.endpoint}/v1/tag/${this.$route.params.id}?nfsw=${this.$route.query.nfsw || false}`)
       this.images = data.photos
     },
     shareTwitter() {
