@@ -2,7 +2,7 @@
   div
     div.grid-parent
       div.grid( v-for="(a, k) in  separate(images, rows)" :key="k" :style="{'max-width': `${100 / rows}%`}")
-        img.grid-image(:src="img.url.replace('public','thumbnail')" v-for="(img, i) in a" :key="i" :class="{'last': i === (a.length - 1)}" @click="openModal(img)")
+        img.grid-image(:src="getlink(img)" v-for="(img, i) in a" :key="i" :class="{'last': i === (a.length - 1)}" @click="openModal(img)")
     div.bottom_point(ref="bottomPoint")
 </template>
 
@@ -33,6 +33,15 @@ export default {
   },
   methods: {
     ...mapMutations('modal', ['openModal', "closeModal","setWidth"]),
+    getlink(image) {
+      const nfswTags = ['nfsw', 'r18'];
+      const name = image.tags.map(t => t.name)
+      if(name.includes(nfswTags[0]) || name.includes(nfswTags[1])) {
+        return image.url.replace('public','nfsw')
+      } else {
+        return image.url.replace('public','thumbnail')
+      }
+    },
     separate(_, rows) {
       const img = []
       for (let i = 0; i < this.images.length; i++) {

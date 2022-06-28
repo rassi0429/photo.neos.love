@@ -25,35 +25,53 @@ export class AppService {
     private userInfoRepository: Repository<UserInfo>,
   ) {}
 
-  async getMomentByUserId(uid: string) {
+  async getMomentByUserId(uid: string, nfsw: boolean) {
     console.log('getMomentByUserId', uid);
-    return this.momentRepository.find({
+    const data = await this.momentRepository.find({
       where: { author: uid },
-      relations: ['photos'],
+      relations: ['photos', 'photos.tags'],
       order: {
         id: 'DESC',
       },
     });
+    if (!nfsw) {
+      const newdata = data.map((d) => {
+        d.photos = this.excludeNFSW(d.photos);
+        return d;
+      });
+      console.log(newdata);
+      return newdata;
+    }
+    return data;
   }
 
-  async getPhotoByUserId(uid: string) {
+  async getPhotoByUserId(uid: string, nfsw: boolean) {
     console.log('getPhotoByUserId', uid);
-    return this.photoRepository.find({
+    const photos = await this.photoRepository.find({
       where: { author: uid },
       relations: ['tags'],
       order: {
         id: 'DESC',
       },
     });
+    if (!nfsw) {
+      return this.excludeNFSW(photos);
+    }
+    return photos;
   }
 
-  async getPhotoById(id: number) {
-    return this.photoRepository.findOne({
+  async getPhotoById(id: number, nfsw: boolean) {
+    const photo = await this.photoRepository.findOne({
       where: {
         id,
       },
       relations: ['tags'],
     });
+    if (nfsw) {
+      return photo;
+    } else {
+      return this.excludeNFSW([photo])[0];
+    }
   }
 
   async getCountInfo(uid: string) {
@@ -96,13 +114,18 @@ export class AppService {
         console.log(tag.name);
         const canvas = createCanvas(1600, 900);
         const ctx = canvas.getContext('2d');
-        const len = tag.photos.length >= 4 ? 4 : tag.photos.length;
+        let len = tag.photos.length >= 4 ? 4 : tag.photos.length;
         const imgs = [];
         for (let i = 0; i < len; i++) {
+          const nfswTags = ['nfsw', 'r18'];
+          const tags = tag.photos[i].tags.map((t) => t.name);
+          const nfsw = tags.includes(nfswTags[0]) || tags.includes(nfswTags[1]);
+          if (nfsw) continue;
           imgs.push(
             await loadImage(tag.photos[i].url.replace('public', 'ogp')),
           );
         }
+        len = imgs.length;
         ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -170,13 +193,18 @@ export class AppService {
       await this.sleep(5000);
       const canvas = createCanvas(1600, 900);
       const ctx = canvas.getContext('2d');
-      const len = moment.photos.length >= 4 ? 4 : moment.photos.length;
+      let len = moment.photos.length >= 4 ? 4 : moment.photos.length;
       const imgs = [];
       for (let i = 0; i < len; i++) {
+        const nfswTags = ['nfsw', 'r18'];
+        const tags = moment.photos[i].tags.map((t) => t.name);
+        const nfsw = tags.includes(nfswTags[0]) || tags.includes(nfswTags[1]);
+        if (nfsw) continue;
         imgs.push(
           await loadImage(moment.photos[i].url.replace('public', 'ogp')),
         );
       }
+      len = imgs.length;
 
       ctx.fillStyle = 'black';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -219,14 +247,24 @@ export class AppService {
     }
   }
 
-  async getMomentById(momentId: number) {
-    return this.momentRepository.findOne({
+  async getMomentById(momentId: number, nfsw: boolean) {
+    const data = await this.momentRepository.findOne({
       where: { id: momentId },
       relations: ['photos', 'photos.tags'],
     });
+    if (!nfsw) {
+      data.photos = this.excludeNFSW(data.photos);
+    }
+    return data;
   }
 
-  async getPhotoByTag(tag: string, order?: string, limit = 0, page = 0) {
+  async getPhotoByTag(
+    tag: string,
+    order?: string,
+    limit = 0,
+    page = 0,
+    nfsw = false,
+  ) {
     const result = await this.tagRepository.findOne({
       where: { name: tag },
       relations: [`photos`, `photos.tags`],
@@ -238,7 +276,12 @@ export class AppService {
     if (limit || page) {
       result.photos = result.photos.slice(page * limit, (page + 1) * limit);
     }
-    return result;
+    if (nfsw) {
+      return result;
+    } else {
+      result.photos = this.excludeNFSW(result.photos);
+      return result;
+    }
   }
 
   async getTags() {
@@ -265,8 +308,14 @@ export class AppService {
     return this.photoRepository.save(photo);
   }
 
-  async getPhotos(limit: number, page: number, tags: string[], user: string) {
-    let photos = [];
+  async getPhotos(
+    limit: number,
+    page: number,
+    tags: string[],
+    user: string,
+    nfsw: boolean,
+  ) {
+    let photos: Photo[] = [];
     if (tags.length !== 0) {
       console.log('tag');
       const tag = this.tagRepository.findOne({ where: { name: 'NULL' } });
@@ -301,7 +350,22 @@ export class AppService {
         },
       });
     }
+    if (!nfsw) {
+      photos = this.excludeNFSW(photos);
+    }
     return photos;
+  }
+
+  excludeNFSW(photos: Photo[]) {
+    const nfswTags = ['nfsw', 'r18'];
+    return photos.filter((p) => {
+      const tags = p.tags.map((t) => t.name.toLowerCase());
+      if (tags.includes(nfswTags[0]) || tags.includes(nfswTags[1])) {
+        return false;
+      } else {
+        return true;
+      }
+    });
   }
 
   async addPhoto(url: string, comment: string, author: string, tags: string[]) {

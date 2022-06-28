@@ -32,7 +32,7 @@ export default {
   components: {UploadModal, PhotoViewModal},
   layout: "normal",
   async asyncData({params, query}) {
-    const {data} = await axios.get("https://photo-api.neos.love/v1/user/" + params.id)
+    const {data} = await axios.get(`https://photo-api.neos.love/v1/user/${params.id}`)
     if (query.modal) {
       const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
       return {preData: data, prePhotoData: photo.data}
@@ -117,11 +117,11 @@ export default {
     ...mapActions('auth', ['getUserInfo', "twitterLogin", "LogOut"]),
     ...mapMutations('upload', ['openModal', "closeModal"]),
     async getUserPhoto() {
-      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/photos`)
+      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/photos?nfsw=${this.$route.query.nfsw || false}`)
       return data
     },
     async getUserMoment() {
-      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/moments`)
+      const {data} = await axios.get(`${this.endpoint}/v1/user/${this.$route.params.id}/moments?nfsw=${this.$route.query.nfsw || false}`)
       return data
     },
     async getUserTwitterInfo() {

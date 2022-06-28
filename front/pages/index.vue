@@ -87,12 +87,12 @@ export default {
     ...mapActions('auth', ['getUserInfo', "twitterLogin", "LogOut"]),
     ...mapMutations('upload', ['openModal', "closeModal"]),
     async getImage() {
-      const {data} = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}`)
+      const {data} = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}&nfsw=${this.$route.query.nfsw || false}`)
       this.images = data
     },
     async addImage() {
       this.page += 1
-      const {data} = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}`)
+      const {data} = await axios.get(`${this.endpoint}/v1/photos?page=${this.page}&nfsw=${this.$route.query.nfsw || false}`)
       if (data.length === 0) {
         this.page -= 1
       }

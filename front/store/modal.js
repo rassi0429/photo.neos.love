@@ -51,13 +51,23 @@ export const actions = {
 
 export const mutations = {
   openModal(state, data) {
-    state.isModalOpen = true
-    state.modalData = data
-    this.$router.push("?modal=" + data.id)
+    if(state.isModalOpen) return
+
+    const nfswTags = ['nfsw', 'r18'];
+    const name = data.tags.map(t => t.name)
+    if(name.includes(nfswTags[0]) || name.includes(nfswTags[1])) {
+      const useraction = window.confirm("エッチな画像が含まれます。あなたは18歳以上ですか？")
+      if(!useraction) {
+        window.location = "https://kids.yahoo.co.jp/"
+      } else {
+        state.isModalOpen = true
+        state.modalData = data
+        this.$router.replace({'query': {modal: data.id}});
+      }
+    }
+
   },
-  openModalWithQuery(state, data) {
-    state.isModalOpen = true
-  },
+
   closeModal(state) {
     state.isModalOpen = false
     state.modalData = {
