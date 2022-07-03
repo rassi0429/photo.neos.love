@@ -48,6 +48,7 @@ export default {
   },
   head() {
     if (this.$route.query.modal) {
+      if(!this.preData) return {}
       return {
         title: this.prePhotoData?.comment,
         meta: [
