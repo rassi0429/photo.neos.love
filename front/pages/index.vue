@@ -24,7 +24,7 @@ export default {
   async asyncData({params, query}) {
     try {
       if (query.modal) {
-        const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
+        const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal.replace("%3Fnsfw%3Dtrue",""))
         return {prePhotoData: photo.data}
       }
     } catch {}

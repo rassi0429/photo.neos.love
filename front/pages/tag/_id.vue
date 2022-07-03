@@ -28,7 +28,7 @@ export default {
     try {
       const {data} = await axios.get("https://photo-api.neos.love/v1/tag/" + encodeURIComponent(params.id))
       if (query.modal) {
-        const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
+        const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal.replace("%3Fnsfw%3Dtrue",""))
         return {preData: data, prePhotoData: photo.data}
       }
       return {preData: data}

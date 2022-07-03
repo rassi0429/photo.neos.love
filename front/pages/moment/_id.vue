@@ -28,7 +28,7 @@ export default {
       const {data} = await axios.get("https://photo-api.neos.love/v1/moment/" + params.id)
       const user = await axios.get(`https://photo-api.neos.love/v1/user/${data.author}`)
       if (query.modal) {
-        const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal)
+        const photo = await axios.get("https://photo-api.neos.love/v1/photo/" + query.modal.replace("%3Fnsfw%3Dtrue",""))
         return {preData: data, prePhotoData: photo.data,preName: user.data.user.name}
       }
       return {preData: data, preName: user.data.user.name}
