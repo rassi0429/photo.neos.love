@@ -1,6 +1,9 @@
 import axios from "axios";
 import auth from "@/plugins/auth";
 
+const CancelToken = axios.CancelToken;
+let updateCancel;
+
 export const state = () => ({
   isModalOpen: false,
   modalData: {
@@ -33,7 +36,10 @@ export const actions = {
   },
   async updateData({commit, state, rootState}) {
     try {
-      const {data} = await axios.get(`${rootState.endpoint}/v1/photo/${state.modalData.id}`)
+      updateCancel?.()
+      const {data} = await axios.get(`${rootState.endpoint}/v1/photo/${state.modalData.id}`, {
+        cancelToken: new CancelToken(function executor(c) { updateCancel = c }),
+      })
       commit('openModal', data)
     } catch {
     }
@@ -49,13 +55,28 @@ export const actions = {
         location.reload()
       }
     }
-  }
+  },
+  async updateDataFromIdSearch({commit, state, rootState}, params) {
+    const { isNext, id, maxTryCount = 30 } = params;
+    let targetId = isNext ? id - 1 : id + 1;
+    for (let tc = 0; tc < maxTryCount; tc++) {
+      if (targetId <= 0) break;
+      try {
+        updateCancel?.()
+        const {data} = await axios.get(`${rootState.endpoint}/v1/photo/${targetId}`, {
+          cancelToken: new CancelToken(function executor(c) { updateCancel = c }),
+        })
+        commit('openModal', {...data, forceUpdate: true})
+        break;
+      } catch {}
+      isNext ? targetId-- : targetId++;
+    }
+  },
 }
 
 export const mutations = {
   openModal(state, data) {
-    if (state.isModalOpen) return
-
+    if (state.isModalOpen && !data.forceUpdate) return
     const nsfwTags = ['nsfw', 'r18'];
     const name = data.tags.map(t => t.name)
     if (name.includes(nsfwTags[0]) || name.includes(nsfwTags[1])) {

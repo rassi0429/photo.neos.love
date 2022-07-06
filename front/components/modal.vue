@@ -3,13 +3,18 @@
     div.image-modal(@click.stop)
       img#editBtn(v-if="!isEditing && (uid === modalData.author) && width > 768" @click="updateEditState(true)" src="/pen.png")
       img#deleteBtn(v-if="!isEditing && (uid === modalData.author)&& width > 768" @click="deletePhoto" src="/delete.png")
-      img#twShareBtn(@click="shareTwitter()" src="/tw.png")
-      img#closeBtn(@click="close()" src="/close.png")
+      div#bottomCTA
+        img#twShareBtn(@click="shareTwitter()" src="/tw.png")
+        img#closeBtn(@click="close()" src="/close.png")
       div.columns.h100.m0.is-flex(:class="{'is-flex is-flex-direction-column': width < 768}")
-        div.column.is-9.p0.center(:class="{'mh70': width < 768}")
+        div.column.is-9.p0.center#RelativeField(:class="{'mh70': width < 768}")
           img.ImageInModal(v-show="!loading" :src="modalData.url" v-on:load="load")
           img.ImageInModal.mh100.w100.of(v-if="loading" :src="modalData.url.replace(`public`,`thumbnail`)")
-        div.column.is-3#InfoField(:class="{'h30': width < 768}")
+          div.pagingBase#pLeft(@click="pagingImg(false)")
+            img#pagingLeftBtn(src="/pagingL.png")
+          div.pagingBase#pRight(@click="pagingImg(true)")
+            img#pagingRightBtn(src="/pagingR.png")
+        div.column.is-3#RelativeField(:class="{'h30': width < 768}")
           div.userField
             p#comment(v-if="!isEditing") {{ modalData.comment.replace(/(<([^>]+)>)/gi, '') }}
               div(v-if="isEditing")
@@ -63,9 +68,7 @@ export default {
         this.url = "/load.png"
         return
       }
-      axios.get(`${this.endpoint}/v1/user/${this.modalData?.author}`).then((res) => {
-        this.name = res.data.user.name
-      })
+      this.updateUserName()
       this.updateData()
     }
   },
@@ -83,7 +86,7 @@ export default {
   },
   methods: {
     ...mapMutations('modal', ["updateTags", 'openModal', "closeModal", "openModalWithQuery", "updateComment", "updateEditState", "deleteTag"]),
-    ...mapActions(`modal`, ["updatePhoto", "updateData", "deletePhoto"]),
+    ...mapActions(`modal`, ["updatePhoto", "updateData", "deletePhoto", "updateDataFromIdSearch"]),
     toUser(userId) {
       this.closeModal()
       this.$router.push('/user/' + userId)
@@ -102,6 +105,11 @@ export default {
       this.loading = true
       this.closeModal()
     },
+    updateUserName() {
+      axios.get(`${this.endpoint}/v1/user/${this.modalData?.author}`).then((res) => {
+        this.name = res.data.user.name
+      })
+    },
     shareTwitter() {
       this.$openTwitterShare({
         type: 'modal',
@@ -110,7 +118,12 @@ export default {
         title: this.modalData?.comment,
         name: this.name,
       });
-    }
+    },
+    async pagingImg(isNext) {
+      this.loading = true
+      await this.updateDataFromIdSearch({ isNext, id: this.modalData.id })
+      this.updateUserName()
+    },
   }
 }
 </script>
@@ -200,7 +213,7 @@ p {
 
 }
 
-#InfoField {
+#RelativeField {
   position: relative;
 }
 
@@ -400,6 +413,47 @@ p {
 
 #TagBtn:hover {
   opacity: 0.5;;
+}
+
+.pagingBase {
+  position: absolute;
+  user-select: none;
+  top: 0;
+  opacity: 0;
+  width: 20%;
+  height: 100%;
+}
+
+#pLeft {
+  left: 0;
+}
+
+#pRight {
+  right: 0;
+}
+
+#pLeft:hover, #pRight:hover {
+  opacity: 0.9;
+}
+
+#pagingLeftBtn {
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  transform: translate(-15%, -50%);
+  max-width: 35px;
+}
+
+#pagingRightBtn {
+  position: absolute;
+  top: 50%;
+  right: 15%;
+  transform: translate(15%, -50%);
+  max-width: 35px;
+}
+
+#bottomCTA {
+  user-select: none;
 }
 
 </style>
