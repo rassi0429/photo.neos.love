@@ -6,6 +6,7 @@ let updateCancel;
 
 export const state = () => ({
   isModalOpen: false,
+  isDisablePagingBtn: true,
   modalData: {
     author: "",
     url: "",
@@ -93,6 +94,10 @@ export const mutations = {
       state.modalData = data
       this.$router.replace({'query': {modal: data.id}});
     }
+    const isUserPage = location.href.includes('/user/');
+    const isMomentPage = location.href.includes('/moment/');
+    const isTagPage = location.href.includes('/tag/');
+    state.isDisablePagingBtn = isUserPage || isMomentPage || isTagPage;
   },
 
   closeModal(state) {

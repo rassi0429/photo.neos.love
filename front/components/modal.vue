@@ -10,9 +10,9 @@
         div.column.is-9.p0.center#RelativeField(:class="{'mh70': width < 768}")
           img.ImageInModal(v-show="!loading" :src="modalData.url" v-on:load="load")
           img.ImageInModal.mh100.w100.of(v-if="loading" :src="modalData.url.replace(`public`,`thumbnail`)")
-          div.pagingBase#pLeft(@click="pagingImg(false)")
+          div.pagingBase#pLeft(v-if="!isDisablePagingBtn" @click="pagingImg(false)")
             img#pagingLeftBtn(src="/pagingL.png")
-          div.pagingBase#pRight(@click="pagingImg(true)")
+          div.pagingBase#pRight(v-if="!isDisablePagingBtn" @click="pagingImg(true)")
             img#pagingRightBtn(src="/pagingR.png")
         div.column.is-3#RelativeField(:class="{'h30': width < 768}")
           div.userField
@@ -58,7 +58,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("modal", ["isModalOpen", "modalData", "username", "isEditing", "editingTag", "width"]),
+    ...mapState("modal", ["isModalOpen", "modalData", "username", "isEditing", "isDisablePagingBtn", "editingTag", "width"]),
     ...mapState(["endpoint"]),
     ...mapState("auth", ["uid"]),
   },
