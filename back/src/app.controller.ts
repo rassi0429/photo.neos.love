@@ -22,6 +22,7 @@ import { ToBoolean } from './toboolean';
 import { NeosbotService } from './neosbot/neosbot.service';
 import { Transform } from 'class-transformer';
 import { IsInt, IsNumber, IsOptional, IsString, Max } from 'class-validator';
+import FormData from "form-data"
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const j2e = require('json2emap');
 
@@ -89,10 +90,12 @@ export class AppController {
   @Get('v1/imageReq')
   @UseGuards(AccountGuard)
   async requestImageUpload(): Promise<string> {
+    const form = new FormData();
+    form.append('requireSignedURLs', 'false');
     const directUploadUrl = await axios.post(
       `https://api.cloudflare.com/client/v4/accounts/${cloudflare.id}/images/v2/direct_upload`,
-      null,
-      { headers: { Authorization: `Bearer ${cloudflare.key}` } },
+      form,
+      { headers: { Authorization: `Bearer ${cloudflare.key}`, ...form.getHeaders() } },
     );
     return directUploadUrl.data;
   }
