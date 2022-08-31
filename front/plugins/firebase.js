@@ -6,7 +6,7 @@ import 'firebase/auth'
 if (!firebase.apps.length) {
   firebase.initializeApp({
     apiKey: "AIzaSyDXykK8y4smDE8d19ozk3caN685vhT2vh8",
-    authDomain: "photo-neos-love.firebaseapp.com",
+    authDomain: "auth.photo.neos.love",
     projectId: "photo-neos-love",
     storageBucket: "photo-neos-love.appspot.com",
     messagingSenderId: "871699453882",
