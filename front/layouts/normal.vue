@@ -35,6 +35,7 @@ export default {
   opacity: 0.5;
   margin-top: 1em;
   z-index: 20;
+  cursor: pointer;
   -webkit-user-drag: none;
 }
 </style>
