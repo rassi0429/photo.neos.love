@@ -119,7 +119,6 @@ export default {
       }
       const currentHeight = window.pageYOffset
       if ((currentHeight + window.innerHeight) > min && !this.tmpScrollState) {
-        console.log(this.tmpScrollState)
         this.tmpScrollState = true
         await this.addImage()
       }

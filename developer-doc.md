@@ -6,7 +6,7 @@
 ### 環境構築
 ```shell
 $ git clone https://github.com/rassi0429/photo.neos.love
-$ cd frontend
+$ cd front
 $ npm install
 $ npm run dev
 ```

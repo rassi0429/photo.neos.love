@@ -2,7 +2,7 @@
   div
     div.grid-parent
       div.grid( v-for="(a, k) in  separate(images, rows)" :key="k" :style="{'max-width': `${100 / rows}%`}")
-        img.grid-image(:src="getlink(img)" v-for="(img, i) in a" :key="i" :class="{'last': i === (a.length - 1)}" @click="openModal(img)")
+        img.grid-image(:src="getlink(img)" v-for="(img, i) in a" :key="i" :class="{'last': i === (a.length - 1)}" @click="openModal(img)" loading="lazy")
     div.bottom_point(ref="bottomPoint")
 </template>
 
@@ -36,11 +36,13 @@ export default {
     getlink(image) {
       const nsfwTags = ['nsfw', 'r18'];
       const name = image.tags.map(t => t.name)
-      if(name.includes(nsfwTags[0]) || name.includes(nsfwTags[1])) {
-        return image.url.replace('public','nsfw')
-      } else {
-        return image.url.replace('public','thumbnail')
-      }
+      let isNsfw = false;
+      nsfwTags.forEach(tag => {
+        if(name.findIndex(namePart => tag === namePart.toLowerCase()) > -1) {
+          isNsfw = true;
+        }
+      });
+      return image.url.replace('public', isNsfw? 'nsfw' : 'thumbnail')
     },
     separate(_, rows) {
       const img = []
